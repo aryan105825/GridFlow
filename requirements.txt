@@ -1,0 +1,7 @@
+requests==2.32.3
+numpy==1.26.4
+PyYAML==6.0.2
+web3==6.20.3
+eth-abi==5.1.0
+matplotlib==3.9.2
+tzdata==2024.2

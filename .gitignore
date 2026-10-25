@@ -1,0 +1,26 @@
+# Dependencies and build output
+node_modules/
+artifacts/
+cache/
+typechain-types/
+coverage/
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# Local HTTP cache and probe payloads (re-creatable); snapshots, models, batches and results ARE committed
+data/cache/
+data/probe/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local zips
+batch_*.zip
+fix_*.zip
+repo.zip

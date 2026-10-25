@@ -1,0 +1,31 @@
+# @schema: assets: list of {key, bm_unit, lat, lon, capacity_kw:int, source_url, offshore:bool}
+# @schema: consumed by gridproof/schemas.py:load_assets(path) -> list[Asset]
+#
+# bm_unit and capacity_kw are taken from the Elexon BMU reference probe (data/probe/bmu_reference.json):
+# capacity_kw = generationCapacity (reported in MW) x 1000. Each entry is ONE BM unit, not the whole farm.
+# lat/lon is the approximate wind-farm location (decimal degrees); the wind cell is chosen with cell_selection=sea.
+# If genuine output is ever flagged OVER_CAPACITY, compare the unit's peak kWh per period with capacity_kw * 0.5.
+assets:
+  - key: dudgeon_1
+    bm_unit: T_DDGNO-1
+    lat: 53.25
+    lon: 1.38
+    capacity_kw: 108000
+    source_url: https://data.elexon.co.uk/bmrs/api/v1/reference/bmunits/all
+    offshore: true
+
+  - key: burbo_ext
+    bm_unit: T_BRBEO-1
+    lat: 53.48
+    lon: -3.18
+    capacity_kw: 257700
+    source_url: https://data.elexon.co.uk/bmrs/api/v1/reference/bmunits/all
+    offshore: true
+
+  - key: race_bank_1
+    bm_unit: T_RCBKO-1
+    lat: 53.27
+    lon: 0.84
+    capacity_kw: 284000
+    source_url: https://data.elexon.co.uk/bmrs/api/v1/reference/bmunits/all
+    offshore: true
