@@ -10,9 +10,9 @@ Physics-checked, replay-proof, browser-re-verifiable half-hourly renewable certi
 
 | | |
 |---|---|
-| **Live verifier** | https://YOUR-USERNAME.github.io/YOUR-REPO/  (pick an asset and a day: green = the browser rebuilt the Merkle root and it equals the on-chain root) |
+| **Live verifier** | https://aryan105825.github.io/GridFlow/  (pick an asset and a day: green = the browser rebuilt the Merkle root and it equals the on-chain root) |
 | **Contract (Sepolia)** | [`0x40CC75e65b87F1c5746486dD7Adecd71a68da83a`](https://sepolia.etherscan.io/address/0x40CC75e65b87F1c5746486dD7Adecd71a68da83a) |
-| **Demo video** | YOUR-VIDEO-LINK |
+| **Demo video** | https://youtu.be/QcI5aUOQbo4 |
 | **Try the hard day** | `race_bank_1`, **2025-03-30**: the 46-period daylight-saving day, still green |
 
 ## Headline result
