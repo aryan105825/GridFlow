@@ -1,0 +1,428 @@
+<!doctype html>
+<!-- @exports: browser page web/verify.html (single file). Pure functions in the CORE block (leafOf, merkleRoot, snapshotHash, canonicalRows) are Node-extractable: text between "CORE-BEGIN" and "CORE-END" markers, run with a global `ethers` (claims C05) -->
+<!-- @imports: contracts/GridProofRegistry.sol:batches(bytes32,uint32), Retired event, leaf rule leafOf(bytes32,uint32,uint8,uint64,uint32) -->
+<!-- @imports: gridproof/pipeline.py:data/batches/{key}_{day}.json, data/models/{key}.json (sha256 of file bytes = on-chain modelHash), gridproof/dataset.py:data/snapshots/{key}.json -->
+<!-- @env: none (RPC URL and contract address come from the page: query ?rpc=&address= override data/deployment.json and the default public Sepolia node) -->
+<!-- @schema: reads web/data/index.json {"assets":[{"key","bm_unit","asset_id","days":[YYYYMMDD,...]}]}, web/data/deployment.json (copy of deployments/{network}.json), web/data/snapshots/{key}.json, web/data/batches/{key}_{day}.json, web/data/models/{key}.json; these files are copied by `report`/verify.sh -->
+<!-- @schema: checks per asset-day: (1) leaves rebuilt from the snapshot equal the published batch (first mismatching sp is named), (2) Merkle root rebuilt in JS equals on-chain root, (3) sha256 of the day's snapshot rows equals on-chain snapshotHash, (4) sha256 of the model file equals on-chain modelHash, (5) period accounting accepted + rejected == expected periods (48/46/50) -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GridProof Verifier</title>
+<meta name="description" content="Rebuild a renewable energy certificate from public data in your browser and compare it with the blockchain.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme:light; --paper:#e3eaee; --panel:#f8fafb; --ink:#10202e; --mut:#4a5e6d; --line:#b9c8d1; --sea:#1d4e89; --sea2:#d2e0ef;
+          --ok:#12794b; --on-ok:#ffffff; --bad:#b42318; --on-bad:#ffffff; --warn:#b26a00; --warnbg:#f6e6c8; --badbg:#f8ddd9; --okbg:#d6eee1; }
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; position:relative; background:var(--paper); color:var(--ink); font:16px/1.55 "Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .mono, .hash { font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace; }
+  a { color:var(--sea); }
+  :focus-visible { outline:3px solid var(--sea); outline-offset:2px; border-radius:6px; }
+  .wrap { position:relative; z-index:1; max-width:1040px; margin:0 auto; padding:0 20px; }
+  body::before { content:""; position:absolute; inset:0 0 auto 0; height:700px; pointer-events:none;
+    background:repeating-linear-gradient(90deg, rgba(16,32,46,.09) 0 1px, transparent 1px 2.0833%);
+    -webkit-mask-image:linear-gradient(#000 25%, transparent); mask-image:linear-gradient(#000 25%, transparent); }
+
+  .top { display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; justify-content:space-between; padding:18px 0; border-bottom:1px solid var(--line); }
+  .brand { font-weight:800; font-size:1.15rem; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; }
+  .brand svg { width:26px; height:26px; }
+  #meta { font-size:.82rem; color:var(--mut); margin:0; }
+  #meta a { font-family:"JetBrains Mono",monospace; }
+
+  .hero { padding:44px 0 28px; }
+  h1 { font-size:clamp(2.1rem,5.4vw,3.6rem); line-height:1.02; letter-spacing:-.035em; font-weight:800; margin:0 0 14px; max-width:17ch; }
+  .lede { color:var(--mut); font-size:1.08rem; max-width:62ch; margin:0 0 26px; }
+  .controls { display:flex; flex-wrap:wrap; gap:12px; align-items:end; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .field { display:flex; flex-direction:column; gap:5px; min-width:0; }
+  label { font-size:.8rem; color:var(--mut); font-weight:500; }
+  select, input { font:inherit; font-size:.97rem; padding:10px 12px; border-radius:9px; border:1px solid var(--line); background:var(--paper); color:var(--ink); min-width:0; }
+  select { min-width:200px; }
+  button { font:inherit; font-weight:700; padding:11px 22px; border-radius:9px; border:0; background:var(--ink); color:var(--paper); cursor:pointer; }
+  button:hover:not(:disabled) { background:var(--sea); color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  button.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); }
+  button.ghost:hover:not(:disabled) { background:var(--sea2); color:var(--ink); }
+  details.adv { margin-top:10px; font-size:.88rem; color:var(--mut); }
+  details.adv summary { cursor:pointer; width:max-content; }
+  details.adv input { width:min(560px,100%); margin-top:8px; }
+
+  #banner { display:none; margin:22px 0 0; border-radius:16px; padding:22px 24px; gap:20px; align-items:center; }
+  #banner.ok, #banner.bad, #banner.wait { display:flex; }
+  #banner.ok { background:var(--ok); color:var(--on-ok); }
+  #banner.bad { background:var(--bad); color:var(--on-bad); }
+  #banner.wait { background:var(--panel); color:var(--mut); border:1px dashed var(--line); }
+  #banner .seal { flex:none; width:54px; height:54px; }
+  #banner h2 { margin:0; font-size:clamp(1.3rem,3vw,1.9rem); letter-spacing:-.02em; line-height:1.15; }
+  #banner p { margin:4px 0 0; opacity:.92; font-size:1rem; overflow-wrap:anywhere; }
+  .spin { animation:spin 1s linear infinite; } @keyframes spin { to { transform:rotate(360deg); } }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:16px; }
+  .stat { background:var(--panel); padding:14px 16px; }
+  .stat b { display:block; font-size:1.55rem; letter-spacing:-.02em; line-height:1.15; }
+  .stat span { font-size:.82rem; color:var(--mut); }
+
+  section.block { margin-top:34px; }
+  h3 { font-size:1.2rem; letter-spacing:-.015em; margin:0 0 4px; }
+  .hint { color:var(--mut); font-size:.92rem; margin:0 0 14px; max-width:70ch; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; }
+
+  #strip svg { width:100%; height:auto; display:block; }
+  #strip rect.bar { cursor:pointer; transition:opacity .15s; } #strip rect.bar:hover { opacity:.7; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:.82rem; color:var(--mut); margin-top:8px; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-1px; margin-right:6px; }
+  .empty { color:var(--mut); padding:36px 8px; text-align:center; }
+
+  .checks { list-style:none; margin:0; padding:0; }
+  .checks > li { padding:14px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:78px 1fr; gap:4px 14px; }
+  .checks > li:first-child { border-top:0; padding-top:2px; }
+  .pill { align-self:start; text-align:center; font-weight:700; font-size:.8rem; padding:3px 0; border-radius:99px; }
+  .pill.p { background:var(--okbg); color:var(--ok); } .pill.f { background:var(--badbg); color:var(--bad); }
+  .checks h4 { margin:0; font-size:1rem; } .checks p { margin:2px 0 0; color:var(--mut); font-size:.9rem; }
+  .hashes { grid-column:2; margin-top:8px; display:grid; gap:4px; }
+  .hline { display:grid; grid-template-columns:76px 1fr; gap:8px; font-size:.78rem; align-items:start; }
+  .hline span:first-child { color:var(--mut); font-family:"Schibsted Grotesk",sans-serif; font-size:.8rem; }
+  .hash { overflow-wrap:anywhere; word-break:break-all; }
+  .hash mark { background:var(--badbg); color:var(--bad); border-radius:3px; padding:0 1px; }
+
+  .lab { display:grid; gap:14px; }
+  .labrow { display:flex; flex-wrap:wrap; gap:12px; align-items:end; }
+  .diff { font-family:"JetBrains Mono",monospace; font-size:.82rem; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .diff div { padding:3px 12px; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .diff .same { color:var(--mut); background:var(--paper); font-family:"Schibsted Grotesk",sans-serif; }
+  .diff .del { background:var(--badbg); color:var(--bad); } .diff .add { background:var(--okbg); color:var(--ok); }
+  .diff .del::before { content:"- published  "; opacity:.75; } .diff .add::before { content:"+ rebuilt    "; opacity:.75; }
+
+  .foot { margin:40px 0 56px; padding-top:18px; border-top:1px solid var(--line); color:var(--mut); font-size:.88rem; max-width:80ch; }
+  .err { color:var(--bad); }
+  @media (max-width:600px) { .checks > li { grid-template-columns:1fr; } .hashes { grid-column:1; } select { min-width:0; width:100%; } .field { flex:1 1 100%; } #banner { padding:18px; } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation:none; } * { transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8" fill="var(--sea2)"/><path d="M6 20c3 0 3-8 6-8s3 8 6 8 3-8 6-8" stroke="var(--sea)" stroke-width="2.6" stroke-linecap="round"/><circle cx="26" cy="12" r="2" fill="var(--ok)"/></svg>
+      GridProof
+    </div>
+    <p id="meta">Loading contract details</p>
+  </header>
+
+  <section class="hero">
+    <h1>Check the certificate, not the reporter.</h1>
+    <p class="lede">Pick an offshore wind farm and a day. Your browser rebuilds every certified half-hour from public data and compares the result with what is recorded on the Sepolia blockchain. No trust in the issuer needed.</p>
+    <div class="controls">
+      <div class="field"><label for="asset">Wind farm</label><select id="asset"></select></div>
+      <div class="field"><label for="day">Day</label><select id="day"></select></div>
+      <button id="go" disabled>Verify this day</button>
+    </div>
+    <details class="adv"><summary>Use a different RPC node</summary><label for="rpc" class="note">Read-only Sepolia RPC URL</label><br><input id="rpc"></details>
+    <div id="banner" role="status" aria-live="polite"></div>
+    <div class="stats" id="stats" style="display:none"></div>
+  </section>
+
+  <section class="block" id="strip">
+    <h3>Every settlement period of the day</h3>
+    <p class="hint">One slot per half-hour. Click a bar to pick it for the tamper test below.</p>
+    <div class="card"><div id="stripbody" class="empty">Run a verification to see the day.</div><div class="legend" id="legend" style="display:none"></div></div>
+  </section>
+
+  <section class="block" id="detail" style="display:none">
+    <h3>What was checked</h3>
+    <p class="hint">Each check compares something your browser computed with something stored on the blockchain.</p>
+    <div class="card"><ul class="checks" id="tbl"></ul></div>
+  </section>
+
+  <section class="block" id="labsec" style="display:none">
+    <h3>Tamper test</h3>
+    <p class="hint">Change one meter reading in your own browser copy and verify again. A single wrong number should turn the result red and point to the exact half-hour.</p>
+    <div class="card lab">
+      <div class="labrow">
+        <div class="field"><label for="labsp">Settlement period</label><select id="labsp"></select></div>
+        <div class="field"><label for="labkwh">New reading (kWh)</label><input id="labkwh" type="number" step="1" min="0" inputmode="numeric"></div>
+        <button id="labgo">Change it and verify</button>
+        <button id="labreset" class="ghost">Restore original</button>
+      </div>
+      <div id="labdiff"></div>
+    </div>
+  </section>
+
+  <p class="foot">What is still trusted: the oracle, the public data sources and the issuer key. ERA5 wind data has about 25 km resolution. A flagged interval means "flagged for audit", not "fraud". Source and method are in the project repository.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.14.0/dist/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/diff@5.2.0/dist/diff.min.js"></script>
+<script>
+// CORE-BEGIN
+// Pure functions, no DOM. Requires a global `ethers` (v6). Mirrors gridproof/merkle.py and GridProofRegistry.leafOf.
+function leafOf(assetId, day, sp, kwh, g) {
+  const enc = ethers.AbiCoder.defaultAbiCoder().encode(
+    ["bytes32", "uint32", "uint8", "uint64", "uint32"], [assetId, day, sp, BigInt(kwh), g]);
+  return ethers.keccak256(ethers.keccak256(enc));
+}
+function hashPair(a, b) {
+  const [x, y] = a.toLowerCase() < b.toLowerCase() ? [a, b] : [b, a];
+  return ethers.keccak256(ethers.concat([x, y]));
+}
+function merkleRoot(leaves) {
+  if (leaves.length === 0) throw new Error("merkleRoot: empty leaf list");
+  let level = leaves.slice();
+  while (level.length > 1) {
+    const next = [];
+    for (let i = 0; i < level.length; i += 2) {
+      next.push(i + 1 < level.length ? hashPair(level[i], level[i + 1]) : level[i]); // odd node promoted unchanged
+    }
+    level = next;
+  }
+  return level[0];
+}
+// Python json.dumps(float) always prints a decimal point; JS prints 8 for 8.0. ws100 is always a float or null.
+function canonicalRows(rows) {
+  const part = (sp, kwh, ws, g) => "[" + [sp, kwh, ws === null ? "null" : (Number.isInteger(ws) ? ws.toFixed(1) : String(ws)),
+    g === null ? "null" : g].join(",") + "]";
+  return "[" + rows.map(r => part(r.sp, r.kwh, r.ws100, r.g)).join(",") + "]";
+}
+function snapshotHash(rows) {
+  const sorted = rows.slice().sort((a, b) => a.sp - b.sp);
+  return ethers.sha256(ethers.toUtf8Bytes(canonicalRows(sorted)));
+}
+function expectedPeriods(day) { // GB clock changes: last Sunday of March = 46 periods, last Sunday of October = 50
+  const y = Math.floor(day / 10000), m = Math.floor(day / 100) % 100, d = day % 100;
+  const lastSunday = (month) => { const last = new Date(Date.UTC(y, month, 0)); return last.getUTCDate() - last.getUTCDay(); };
+  if (m === 3 && d === lastSunday(3)) return 46;
+  if (m === 10 && d === lastSunday(10)) return 50;
+  return 48;
+}
+// CORE-END
+
+const ABI = [
+  "function batches(bytes32,uint32) view returns (bytes32 root, bytes32 modelHash, bytes32 snapshotHash, uint64 totalKwh, uint16 intervals, uint64 issuedAt, address holder)",
+  "event Retired(bytes32 indexed assetId, uint32 indexed day, uint8 sp, bytes32 indexed beneficiaryRef, uint64 kwh, uint32 gPerKwh, uint256 grams)"
+];
+const DEFAULT_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
+const $ = (id) => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+const ctxCache = new Map();
+let index = null, deployment = null, current = null;
+
+async function getJson(path) {
+  const r = await fetch(path, { cache: "no-store" });
+  if (!r.ok) throw new Error(`GET ${path} -> HTTP ${r.status}. Run "python -m gridproof.cli report" (or scripts/verify.sh) to populate web/data/, and serve this folder over http (python -m http.server -d web).`);
+  return r.json();
+}
+async function getBytes(path) {
+  const r = await fetch(path, { cache: "no-store" });
+  if (!r.ok) throw new Error(`GET ${path} -> HTTP ${r.status}.`);
+  return new Uint8Array(await r.arrayBuffer());
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+const fmt = (n) => Number(n).toLocaleString("en-GB");
+const dayStr = (d) => String(d).replace(/(\d{4})(\d\d)(\d\d)/, "$1-$2-$3");
+
+const SEAL_OK = '<svg class="seal" viewBox="0 0 54 54" fill="none" aria-hidden="true"><circle cx="27" cy="27" r="25" stroke="currentColor" stroke-width="3"/><path d="M16 28l8 8 15-17" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SEAL_BAD = '<svg class="seal" viewBox="0 0 54 54" fill="none" aria-hidden="true"><circle cx="27" cy="27" r="25" stroke="currentColor" stroke-width="3"/><path d="M18 18l18 18M36 18L18 36" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
+const SEAL_WAIT = '<svg class="seal spin" viewBox="0 0 54 54" fill="none" aria-hidden="true"><circle cx="27" cy="27" r="22" stroke="currentColor" stroke-width="4" opacity=".25"/><path d="M27 5a22 22 0 0 1 22 22" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
+function setBanner(kind, title, sub) {
+  const b = $("banner"); b.className = kind;
+  b.innerHTML = (kind === "ok" ? SEAL_OK : kind === "bad" ? SEAL_BAD : SEAL_WAIT) + `<div><h2>${esc(title)}</h2>${sub ? `<p>${esc(sub)}</p>` : ""}</div>`;
+}
+
+async function init() {
+  try {
+    index = await getJson("data/index.json");
+    deployment = await getJson("data/deployment.json");
+    $("rpc").value = q.get("rpc") || DEFAULT_RPC;
+    $("asset").innerHTML = index.assets.map(a => `<option value="${esc(a.key)}">${esc(a.key)} (${esc(a.bm_unit)})</option>`).join("");
+    const wantA = q.get("asset"); if (wantA && index.assets.some(a => a.key === wantA)) $("asset").value = wantA;
+    $("asset").onchange = fillDays; fillDays();
+    const addr = q.get("address") || deployment.address;
+    const scan = deployment.chainId === 11155111 ? `https://sepolia.etherscan.io/address/${addr}` : null;
+    $("meta").innerHTML = `Contract ${scan ? `<a href="${esc(scan)}" target="_blank" rel="noopener">${esc(addr.slice(0, 8))}…${esc(addr.slice(-6))}</a>` : esc(addr)} on ${esc(deployment.network)}`;
+    $("go").disabled = false;
+    if (!q.has("noauto")) verify();
+  } catch (e) { setBanner("bad", "The verifier could not start", e.message); }
+}
+function fillDays() {
+  const a = index.assets.find(x => x.key === $("asset").value);
+  $("day").innerHTML = a.days.map(d => `<option value="${d}">${dayStr(d)}${expectedPeriods(d) !== 48 ? ` (${expectedPeriods(d)} periods, clocks change)` : ""}</option>`).join("");
+  const want = q.get("day"); if (want && a.days.includes(Number(want))) $("day").value = want;
+}
+
+async function loadCtx(key, day) {
+  const id = key + "|" + day;
+  if (ctxCache.has(id)) return ctxCache.get(id);
+  const asset = index.assets.find(x => x.key === key);
+  const [snap, batch] = await Promise.all([getJson(`data/snapshots/${key}.json`), getJson(`data/batches/${key}_${day}.json`)]);
+  const modelBytes = await getBytes(`data/models/${key}.json`);
+  const provider = new ethers.JsonRpcProvider($("rpc").value.trim());
+  const reg = new ethers.Contract(q.get("address") || deployment.address, ABI, provider);
+  const chainB = await reg.batches(asset.asset_id, day);
+  if (chainB.issuedAt === 0n) throw new Error(`No batch on chain for ${key} ${day}: it was never issued (or wrong contract/RPC).`);
+  let retired;
+  try {
+    const logs = await reg.queryFilter(reg.filters.Retired(asset.asset_id, day), deployment.blockNumber || 0);
+    const grams = logs.reduce((s, l) => s + l.args.grams, 0n);
+    retired = { n: logs.length, t: Number(grams) / 1e6 };
+  } catch (e) { retired = { err: e.message }; }
+  const c = { asset, snap, batch, modelBytes, chainB, retired, key, day };
+  ctxCache.set(id, c); return c;
+}
+
+// Pure comparison. `tamper` = {sp, kwh} replaces one reading in the local copy only.
+function evaluate(c, tamper) {
+  const { asset, snap, batch, modelBytes, chainB, day } = c;
+  const dayRows = snap.rows.filter(r => r[0] === day).map(r => ({ sp: r[1], start: r[2], kwh: r[3], ws100: r[4], g: r[5] }));
+  if (dayRows.length === 0) throw new Error(`Snapshot data/snapshots/${c.key}.json has no rows for ${day}.`);
+  if (tamper) dayRows.forEach(r => { if (r.sp === tamper.sp) r.kwh = tamper.kwh; });
+  const bySp = new Map(dayRows.map(r => [r.sp, r]));
+  let firstBad = null; const leaves = [];
+  batch.sps.forEach((sp, i) => {
+    const r = bySp.get(sp);
+    if (!r) { firstBad = firstBad || { sp, field: "kwh", pub: batch.kwh[i], loc: "missing" }; return; }
+    if (r.kwh !== batch.kwh[i]) firstBad = firstBad || { sp, field: "kwh", pub: batch.kwh[i], loc: r.kwh };
+    else if (r.g !== batch.g[i]) firstBad = firstBad || { sp, field: "g", pub: batch.g[i], loc: r.g };
+    leaves.push(leafOf(asset.asset_id, day, sp, r.kwh, r.g === null ? 0 : r.g));
+  });
+  const localRoot = leaves.length === batch.sps.length ? merkleRoot(leaves) : null;
+  const rootOk = localRoot !== null && localRoot.toLowerCase() === chainB.root.toLowerCase();
+  const snapHash = snapshotHash(dayRows);
+  const snapOk = snapHash.toLowerCase() === chainB.snapshotHash.toLowerCase();
+  const modelHash = ethers.sha256(modelBytes);
+  const modelOk = modelHash.toLowerCase() === chainB.modelHash.toLowerCase();
+  const expected = expectedPeriods(day), accounted = dayRows.length, acctOk = accounted === expected;
+  const kwhSum = batch.sps.reduce((s, sp) => s + (bySp.get(sp) ? bySp.get(sp).kwh : 0), 0);
+  const sumOk = BigInt(kwhSum) === chainB.totalKwh && Number(chainB.intervals) === batch.sps.length;
+  let grams = 0; batch.sps.forEach(sp => { const r = bySp.get(sp); if (r) grams += r.kwh * (r.g === null ? 0 : r.g); });
+  const ok = rootOk && snapOk && modelOk && !firstBad && sumOk && acctOk;
+  return { c, tamper, dayRows, bySp, firstBad, localRoot, rootOk, snapHash, snapOk, modelHash, modelOk, expected, accounted, acctOk,
+           rejected: accounted - batch.sps.length, kwhSum, sumOk, grams, ok };
+}
+
+function hashDiff(chain, local) {
+  const a = String(chain), b = String(local || "not computable");
+  if (typeof Diff === "undefined" || a.toLowerCase() === b.toLowerCase()) return [esc(a), esc(b)];
+  let l = "", r = "";
+  Diff.diffChars(a, b).forEach(p => {
+    const t = esc(p.value);
+    if (p.added) r += `<mark>${t}</mark>`; else if (p.removed) l += `<mark>${t}</mark>`; else { l += t; r += t; }
+  });
+  return [l, r];
+}
+const hl = (name, html) => `<div class="hline"><span>${name}</span><span class="hash">${html}</span></div>`;
+function check(ok, title, text, hashes) {
+  return `<li><span class="pill ${ok ? "p" : "f"}">${ok ? "Passed" : "Failed"}</span><div><h4>${esc(title)}</h4><p>${text}</p></div>${hashes ? `<div class="hashes">${hashes}</div>` : ""}</li>`;
+}
+
+function render(res) {
+  const { c, ok } = res, key = c.key, day = c.day, n = c.batch.sps.length;
+  if (ok) setBanner("ok", `Verified: ${key}, ${dayStr(day)}`, `Your browser rebuilt ${n} half-hourly readings and the Merkle root matches the chain.`);
+  else {
+    const f = res.firstBad;
+    const why = f ? `Mismatch at period ${f.sp}: the certificate says ${f.pub} ${f.field === "kwh" ? "kWh" : "g/kWh"}, the data says ${f.loc}.`
+      : !res.rootOk ? "The Merkle root rebuilt in the browser differs from the on-chain root."
+      : !res.snapOk ? "The snapshot hash differs from the one recorded on-chain."
+      : !res.modelOk ? "The checking model's hash differs from the one recorded on-chain."
+      : !res.sumOk ? "Total energy or interval count differs from the chain." : `Period accounting is ${res.accounted}, expected ${res.expected}.`;
+    setBanner("bad", `Not verified: ${key}, ${dayStr(day)}`, why);
+  }
+  const st = $("stats"); st.style.display = "grid";
+  st.innerHTML = `<div class="stat"><b>${n} of ${res.accounted}</b><span>periods certified (${res.rejected} flagged or excluded)</span></div>
+    <div class="stat"><b>${(res.kwhSum / 1000).toFixed(1)} MWh</b><span>certified energy</span></div>
+    <div class="stat"><b>${(res.grams / 1e6).toFixed(2)} tCO2e</b><span>at half-hourly grid intensity</span></div>
+    <div class="stat"><b>${c.retired.err ? "n/a" : c.retired.n}</b><span>${c.retired.err ? "retirement log unavailable from this RPC" : `retired intervals${c.retired.n ? ` (${c.retired.t.toFixed(4)} tCO2e)` : ""}`}</span></div>`;
+  drawStrip(res);
+  const [rc, rl] = hashDiff(c.chainB.root, res.localRoot), [sc, sl] = hashDiff(c.chainB.snapshotHash, res.snapHash), [mc, ml] = hashDiff(c.chainB.modelHash, res.modelHash);
+  $("tbl").innerHTML =
+    check(res.rootOk, "Merkle root", "Every certified half-hour is turned into a leaf and combined into one root. It must equal the root stored on-chain.", hl("On-chain", rc) + hl("Rebuilt", rl)) +
+    check(res.snapOk, "Source data fingerprint", "A hash of the day's raw readings (meter, wind speed, grid intensity) must match the fingerprint stored on-chain.", hl("On-chain", sc) + hl("Rebuilt", sl)) +
+    check(res.modelOk, "Checking model", "The statistical model that judged the readings is fixed on-chain by its hash, so it cannot be swapped afterwards.", hl("On-chain", mc) + hl("File", ml)) +
+    check(res.sumOk, "Totals", `${n} certified intervals and ${fmt(res.kwhSum)} kWh here; the chain records ${c.chainB.intervals} and ${fmt(c.chainB.totalKwh)} kWh.`) +
+    check(res.acctOk, "Every period accounted for", `${n} certified + ${res.rejected} not certified = ${res.accounted}; this day should have ${res.expected} periods${res.expected !== 48 ? " because the clocks change" : ""}.`);
+  $("detail").style.display = "block";
+  // tamper lab
+  $("labsec").style.display = "block";
+  const sel = $("labsp"), prev = sel.value;
+  sel.innerHTML = c.batch.sps.map((sp, i) => `<option value="${sp}">Period ${sp} (${c.batch.kwh[i]} kWh published)</option>`).join("");
+  if (prev && c.batch.sps.includes(Number(prev))) sel.value = prev;
+  if (!res.tamper) { labDefault(); $("labdiff").innerHTML = ""; } else renderLabDiff(res);
+}
+
+function drawStrip(res) {
+  const c = res.c, N = res.expected, W = 960, H = 210, base = 176, top = 14, ph = base - top;
+  const accepted = new Set(c.batch.sps);
+  const maxK = Math.max(1, ...res.dayRows.map(r => r.kwh));
+  const gs = res.dayRows.filter(r => r.g !== null).map(r => r.g), gmin = Math.min(...gs), gmax = Math.max(...gs);
+  const sw = W / N, bw = Math.max(3, sw * 0.7);
+  let bars = "", ticks = "", line = [];
+  for (let sp = 1; sp <= N; sp++) {
+    const x = (sp - 1) * sw + (sw - bw) / 2, r = res.bySp.get(sp);
+    const t = res.tamper && res.tamper.sp === sp;
+    if (!r) { bars += `<rect x="${x}" y="${base - 3}" width="${bw}" height="3" fill="var(--line)"><title>Period ${sp}: no data</title></rect>`; continue; }
+    const h = Math.max(0, r.kwh) / maxK * ph;
+    if (accepted.has(sp)) bars += `<rect class="bar" data-sp="${sp}" x="${x}" y="${base - Math.max(h, 2)}" width="${bw}" height="${Math.max(h, 2)}" rx="2" fill="${t ? "var(--bad)" : "var(--sea)"}"><title>Period ${sp}, ${esc(r.start || "")}: ${fmt(r.kwh)} kWh, ${r.g === null ? "no" : r.g} g/kWh${t ? " (changed by you)" : ""}</title></rect>`;
+    else bars += `<rect x="${x}" y="${base - Math.max(h, 5)}" width="${bw}" height="${Math.max(h, 5)}" rx="2" fill="var(--warn)"><title>Period ${sp}, ${esc(r.start || "")}: not certified (${r.kwh < 0 ? "negative reading, grid import" : "flagged by the oracle"}), ${fmt(r.kwh)} kWh</title></rect>`;
+    if (r.g !== null && gmax > gmin) line.push(`${(x + bw / 2).toFixed(1)},${(base - 6 - (r.g - gmin) / (gmax - gmin) * (ph - 30)).toFixed(1)}`);
+    if ((sp - 1) % 6 === 0) ticks += `<text x="${(sp - 1) * sw}" y="${H - 8}" font-size="11" fill="var(--mut)">${esc(r && r.start ? r.start.slice(11, 16) : "")}</text>`;
+  }
+  $("stripbody").className = "";
+  $("stripbody").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Energy per half-hour for ${esc(c.key)} on ${dayStr(c.day)}"><line x1="0" x2="${W}" y1="${base}" y2="${base}" stroke="var(--line)"/>${bars}${line.length > 1 ? `<polyline points="${line.join(" ")}" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3" opacity=".75"/>` : ""}${ticks}<text x="${W}" y="${H - 8}" font-size="11" text-anchor="end" fill="var(--mut)">UTC</text></svg>`;
+  const lg = $("legend"); lg.style.display = "flex";
+  lg.innerHTML = `<span><i style="background:var(--sea)"></i>Certified (height = kWh)</span><span><i style="background:var(--warn)"></i>Not certified (${res.rejected})</span><span><i style="background:var(--line)"></i>No data</span><span><i style="background:transparent;border-top:2px dashed var(--ink);border-radius:0;height:0;vertical-align:4px"></i>Grid intensity ${gs.length ? `(${gmin} to ${gmax} g/kWh)` : ""}</span>`;
+}
+
+function labDefault() {
+  const c = current && current.c; if (!c) return;
+  const i = c.batch.sps.indexOf(Number($("labsp").value));
+  if (i >= 0) $("labkwh").value = c.batch.kwh[i] + 1;
+}
+function renderLabDiff(res) {
+  const c = res.c;
+  const pub = c.batch.sps.map((sp, i) => `period ${String(sp).padStart(2, "0")}  ${c.batch.kwh[i]} kWh  ${c.batch.g[i]} g/kWh`);
+  const loc = c.batch.sps.map(sp => { const r = res.bySp.get(sp); return `period ${String(sp).padStart(2, "0")}  ${r ? r.kwh : "missing"} kWh  ${r ? r.g : "?"} g/kWh`; });
+  let html = "";
+  if (typeof Diff !== "undefined") {
+    Diff.diffArrays(pub, loc).forEach(p => {
+      if (p.added) p.value.forEach(v => html += `<div class="add">${esc(v)}</div>`);
+      else if (p.removed) p.value.forEach(v => html += `<div class="del">${esc(v)}</div>`);
+      else html += `<div class="same">${p.count} identical interval${p.count === 1 ? "" : "s"}</div>`;
+    });
+  } else html = `<div class="same">Diff library not loaded.</div>`;
+  $("labdiff").innerHTML = `<p class="hint" style="margin:0 0 8px">${res.ok ? "No difference found." : "Exactly one reading differs, so the Merkle root, the snapshot hash and the interval check all fail. The numbers below are what your browser compared."}</p><div class="diff">${html}</div>`;
+}
+
+async function verify() {
+  $("go").disabled = true; $("labgo").disabled = true;
+  setBanner("wait", "Verifying…", "Fetching the batch from the blockchain and rebuilding it here.");
+  const t0 = performance.now();
+  try {
+    const c = await loadCtx($("asset").value, Number($("day").value));
+    current = evaluate(c, null); render(current);
+    if (current.ok) { const b = $("banner").querySelector("p"); b.textContent += ` (${((performance.now() - t0) / 1000).toFixed(1)} s)`; }
+  } catch (e) {
+    setBanner("bad", "Verification could not run", e.message);
+    $("detail").style.display = "none"; $("labsec").style.display = "none"; $("stats").style.display = "none";
+  } finally { $("go").disabled = false; $("labgo").disabled = false; }
+}
+function tamper() {
+  if (!current) return;
+  const sp = Number($("labsp").value), kwh = Number($("labkwh").value);
+  if (!Number.isInteger(kwh) || kwh < 0) { $("labdiff").innerHTML = '<p class="err">Enter a whole number of kWh, zero or more.</p>'; return; }
+  current = evaluate(current.c, { sp, kwh }); render(current);
+  $("banner").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+$("go").onclick = verify;
+$("labgo").onclick = tamper;
+$("labreset").onclick = () => { if (current) { current = evaluate(current.c, null); render(current); } };
+$("labsp").onchange = labDefault;
+$("stripbody").addEventListener("click", (e) => {
+  const sp = e.target && e.target.dataset && e.target.dataset.sp;
+  if (sp && $("labsp").querySelector(`option[value="${sp}"]`)) { $("labsp").value = sp; labDefault(); $("labsec").scrollIntoView({ behavior: "smooth", block: "center" }); }
+});
+init();
+</script>
+</body>
+</html>
