@@ -1,0 +1,50 @@
+{
+  "burbo_ext": {
+    "by_reason": {
+      "ABOVE_ENVELOPE": 4,
+      "FROZEN_METER": 0,
+      "MISSING_DATA": 0,
+      "NEG_OR_NAN": 193,
+      "OK": 1289,
+      "OVER_CAPACITY": 0
+    },
+    "false_flag_rate": 0.003094,
+    "min_negative_kwh": -1015,
+    "n_missing_data": 0,
+    "n_negative_meter": 193,
+    "n_test": 1293,
+    "n_train": 13761
+  },
+  "dudgeon_1": {
+    "by_reason": {
+      "ABOVE_ENVELOPE": 0,
+      "FROZEN_METER": 0,
+      "MISSING_DATA": 0,
+      "NEG_OR_NAN": 113,
+      "OK": 1373,
+      "OVER_CAPACITY": 0
+    },
+    "false_flag_rate": 0.0,
+    "min_negative_kwh": -711,
+    "n_missing_data": 0,
+    "n_negative_meter": 113,
+    "n_test": 1373,
+    "n_train": 15009
+  },
+  "race_bank_1": {
+    "by_reason": {
+      "ABOVE_ENVELOPE": 0,
+      "FROZEN_METER": 0,
+      "MISSING_DATA": 0,
+      "NEG_OR_NAN": 137,
+      "OK": 1349,
+      "OVER_CAPACITY": 0
+    },
+    "false_flag_rate": 0.0,
+    "min_negative_kwh": -1304,
+    "n_missing_data": 0,
+    "n_negative_meter": 137,
+    "n_test": 1349,
+    "n_train": 14747
+  }
+}

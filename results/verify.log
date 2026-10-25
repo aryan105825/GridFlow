@@ -1,0 +1,243 @@
+== compile contract: npm run compile
+
+> gridproof@0.1.0 compile
+> hardhat compile
+
+Nothing to compile
+== hardhat contract tests: npm test
+
+> gridproof@0.1.0 test
+> hardhat test
+
+
+
+  GridProofRegistry
+    ✔ 1. only the owner can register assets and issue batches (511ms)
+    ✔ 2. issueBatch stores the batch and emits BatchIssued
+    ✔ 3. duplicate asset, duplicate batch, unknown asset and empty batch are rejected
+    ✔ 4. daily capacity guard: capacityKw * 25 passes, one kWh more reverts
+    ✔ 5. interval capacity guard: 204000 kWh retires, 204001 kWh reverts
+    ✔ 6. retire records the holder, emits Retired and accumulates grams per beneficiary
+    ✔ 7. an interval cannot be retired twice
+    ✔ 8. forged kWh, forged intensity and wrong proofs fail with BAD_PROOF
+    ✔ 9. only the batch holder can retire, and a missing batch reverts
+    ✔ 10. leafOf matches the JS leaf and verifyLeaf accepts every leaf in trees of size 1 to 5
+
+
+  10 passing (631ms)
+
+== deploy contract (local): npm run deploy:local
+
+> gridproof@0.1.0 deploy:local
+> hardhat run scripts/deploy.js --network localhost
+
+GridProofRegistry deployed on localhost (chainId 31337)
+  address:  0x5FbDB2315678afecb367f032d93F642f64180aa3
+  issuer:   0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+  tx:       0x6f8b60f7345aae21fc2fd2a2fed6ba63c90b996459956213db8cce57140c623a
+  record:   deployments/localhost.json
+== train envelope: .venv/bin/python -m gridproof.cli train
+trained dudgeon_1: n_train=15009 model_sha256=0x283be5e0bb9e46ce4e944f955a0c09c8576d4197b35b93e62831e993df6d3d66 data/models/dudgeon_1.json
+trained burbo_ext: n_train=13761 model_sha256=0xbe27414859963357a245a559bb08607161c94150731b46214e4f1167b2e919ff data/models/burbo_ext.json
+trained race_bank_1: n_train=14747 model_sha256=0xf7da808d3850da3a6ad6e77e53a99e32bbf0219e9267e7e0d47e4108d1220cd9 data/models/race_bank_1.json
+== judge issue month: .venv/bin/python -m gridproof.cli judge
+judged dudgeon_1: {"accepted": 1373, "accepted_kwh": 30159354, "by_reason": {"ABOVE_ENVELOPE": 0, "FROZEN_METER": 0, "MISSING_DATA": 0, "NEG_OR_NAN": 113, "OK": 1373, "OVER_CAPACITY": 0}, "n": 1486, "rejected": 113, "rejected_kwh": 0, "rejected_rate": 0.07604306864064603}
+judged burbo_ext: {"accepted": 1289, "accepted_kwh": 56524574, "by_reason": {"ABOVE_ENVELOPE": 4, "FROZEN_METER": 0, "MISSING_DATA": 0, "NEG_OR_NAN": 193, "OK": 1289, "OVER_CAPACITY": 0}, "n": 1486, "rejected": 197, "rejected_kwh": 411320, "rejected_rate": 0.1325706594885599}
+judged race_bank_1: {"accepted": 1349, "accepted_kwh": 72977497, "by_reason": {"ABOVE_ENVELOPE": 0, "FROZEN_METER": 0, "MISSING_DATA": 0, "NEG_OR_NAN": 137, "OK": 1349, "OVER_CAPACITY": 0}, "n": 1486, "rejected": 137, "rejected_kwh": 0, "rejected_rate": 0.09219380888290714}
+== issue batches: .venv/bin/python -m gridproof.cli issue
+register dudgeon_1 day=0 tx=0x62cb0166c2abeb8b4ee8af6daf0f4122b78e612a7ce42e89d92229b6f828f77b block=2 gas=49918
+issue dudgeon_1 day=20250301 tx=0xd4f0b01c0b370218e095a9bdb936caae655019286e49f470de5b4433614a8e41 block=3 gas=144303
+issue dudgeon_1 day=20250302 tx=0xd36885a88d43b3c10ff221161f749749676e950555a3a90217c2d95ffb365b39 block=4 gas=144315
+issue dudgeon_1 day=20250303 tx=0xfc01f7ea266dd7135e0fe2e4ea07d40aa9b619e7116663eee5cdfed6380e23f4 block=5 gas=144315
+issue dudgeon_1 day=20250304 tx=0x8e42a5f420091d9d838454b5d24fa302a03496109b6134971abf6f3be19bdbaf block=6 gas=144315
+issue dudgeon_1 day=20250305 tx=0xfc60f1359249984524bb4b44ebb02e8b1b29ed1a9314981db8ca5c51b86ae730 block=7 gas=144315
+issue dudgeon_1 day=20250306 tx=0x70a0f01e49108181c2070447ed9172e2b896d528949c309f48a0ccf65f10ec3c block=8 gas=144303
+issue dudgeon_1 day=20250307 tx=0x87353b8f6f9b01f8d922ce590c0a6359dd75ae567d2b49953fa736b036814f36 block=9 gas=144303
+issue dudgeon_1 day=20250308 tx=0x66c33be1fcf2afdd27e034b1ad8317e4ee19e5eab1be4eb3fc97dfa00e916436 block=10 gas=144291
+issue dudgeon_1 day=20250309 tx=0x7ad7403c7d647a52d46c5f02f94494f570109c640e25e9347dd5213d1f0ce0b4 block=11 gas=144315
+issue dudgeon_1 day=20250310 tx=0xea7e3f51b5d994da6863e20626179bf7bf3f9c24811c9771ee6ce14d33b0df68 block=12 gas=144315
+issue dudgeon_1 day=20250311 tx=0xf5527d5e4693353e7cd3db896a88c99c6ab2f4ea53f198bd412f32370a8798cb block=13 gas=144315
+issue dudgeon_1 day=20250312 tx=0x42244eae4ece519df5a50cc674c058fce75747bc43ed596d486c666dab9cd89e block=14 gas=144315
+issue dudgeon_1 day=20250313 tx=0x702eac1f027e033e87fd0bf9225ef8c2a350779651e583598caaf2c4b3feae30 block=15 gas=144315
+issue dudgeon_1 day=20250314 tx=0x7fdf658e221e4b341969ebda49ace5849cdebf5ab7050ff65aacb171eb9e81c7 block=16 gas=144315
+issue dudgeon_1 day=20250315 tx=0x4063354a8d42fd9c13ef0244aa4d0df89015c0d0a5c2a3c53ba00300ac9956e1 block=17 gas=144315
+issue dudgeon_1 day=20250316 tx=0x60d287005873a3a410cbeeeabf7ea6823f33d036a87385903878f677f55533e0 block=18 gas=144315
+issue dudgeon_1 day=20250317 tx=0xfdf5ca14f2ad2a53548dc5b12f03e7cc5f04ee5583923320741c236469be72d7 block=19 gas=144315
+issue dudgeon_1 day=20250318 tx=0xdeb92b5ff31fd541006dbe4ccb834f95b6b7d234ad2c2cc9948b850491e49d1a block=20 gas=144315
+issue dudgeon_1 day=20250319 tx=0x9b2c15c061d9283d5112a9d8f817dda151e369880d18a051f493b620a5b606a8 block=21 gas=144315
+issue dudgeon_1 day=20250320 tx=0x865c11ba74ce5f40e745abf4613ef3d0a69789017be2e1e2211bf1195f200bc6 block=22 gas=144315
+issue dudgeon_1 day=20250321 tx=0xf84f3875c4cb75249bfd64ed6d528678346d43cb76211d590fedd316bb9be756 block=23 gas=144315
+issue dudgeon_1 day=20250322 tx=0xecbab81452e4eabe1c84fc1286a3d78ad490d520dcc6512c9b229d1263c76576 block=24 gas=144315
+issue dudgeon_1 day=20250323 tx=0xd0a40ff2bf53f6358c736faa5b899bcec1b2c7a05c2b1679bca43a5e0b66e950 block=25 gas=144315
+issue dudgeon_1 day=20250324 tx=0xe8020ccd3de84f78924c075973370e354fb23a4ed5e8a4ac1dd9a391dab63bd1 block=26 gas=144315
+issue dudgeon_1 day=20250325 tx=0xac4f3b1c6fff09b268138245be5ab9a142f152b15e2492ab923fb9bc57432d84 block=27 gas=144303
+issue dudgeon_1 day=20250326 tx=0x0549474212485f7991a9ddc3321d6062df88e21910e4bbaebf07522a3e2e2de6 block=28 gas=144315
+issue dudgeon_1 day=20250327 tx=0xd70b9cd946bd1ff7c2d9e366961383b96201e79a0b022346f80a1193f00f1b09 block=29 gas=144315
+issue dudgeon_1 day=20250328 tx=0x5d055106a99454662c4e8a2a35d0b5dd86d1566b9a5b0239577fc56f71e3abf5 block=30 gas=144303
+issue dudgeon_1 day=20250329 tx=0x5d7a1e3749ffaa53da4cb75255c7b9e3171167ac64ab96ebb40d7f6ae5aba7d1 block=31 gas=144315
+issue dudgeon_1 day=20250330 tx=0x398f2e5d2bf6191e37bfa5f8849b7ed76dfaab0a23557279eeee26d92f44aac5 block=32 gas=144315
+issue dudgeon_1 day=20250331 tx=0x2fc9cf5ee70120ed1ebc1441c2a8c0ec622afc254678fd00fd9434f117b2382c block=33 gas=144303
+register burbo_ext day=0 tx=0xc32b56d717bc5cd0a29edbe2a29161870b4f9e26fcd54212c9a39048d23d9331 block=34 gas=49918
+issue burbo_ext day=20250301 tx=0x0879b0df2f0cad6b8c4d3a79703322a9742b13ffe69ca117e7d1b107356d0550 block=35 gas=144303
+issue burbo_ext day=20250302 tx=0xf5d634427239544c8958c995709b10af259b0d3ed902f8e3012d41e92b6537bd block=36 gas=144315
+issue burbo_ext day=20250303 tx=0xfd0cf3116bce4c01411f0e749f103a314c02e40deb684a36c591e91827d1a40d block=37 gas=144315
+issue burbo_ext day=20250304 tx=0xf0d298fb93cc1969ae879004136cd559a24c8130769a7eef829f9f51538293e6 block=38 gas=144315
+issue burbo_ext day=20250305 tx=0x7a0bc20817b08fcdae6285a93886858795b81a340bed53a2d0e3ee2b2008160e block=39 gas=144315
+issue burbo_ext day=20250306 tx=0x8d077e8e972392eac6c1543fc2d5140c68b5d9069a29691eaa492396e6e93504 block=40 gas=144303
+issue burbo_ext day=20250307 tx=0xb196cbd9123862b11e48295260486fb96e1699b2e5133293dfbde1ef7b944e4f block=41 gas=144315
+issue burbo_ext day=20250308 tx=0xfde82fd1d4dbfa0f379480efcd826d0e656badcdf2c6ea523cf38ff2a7b3f969 block=42 gas=144315
+issue burbo_ext day=20250309 tx=0x7e5ff6239210b0643b3f18282f2fa0d4d51cc043a0ba71169b1e8a9bf5114af0 block=43 gas=144303
+issue burbo_ext day=20250310 tx=0xef79f67e53e9acb418854f4ffb0929276e86c10af1cb32bf90e1aee3b88b47ec block=44 gas=144315
+issue burbo_ext day=20250311 tx=0xbb06009710c43fbfa7f2666992a3ee155e079fb4d6e9bc414277822e1cb0595c block=45 gas=144315
+issue burbo_ext day=20250312 tx=0x3bb0959fe8aa688294d6f35aeadd5f876437830fae3f6e620f906517805442ba block=46 gas=144303
+issue burbo_ext day=20250313 tx=0xe851cd95181123d92fb153615b68db18aa318b3fa72478dc83bc32f1d670f479 block=47 gas=144315
+issue burbo_ext day=20250314 tx=0x587fc13483beabd145de1636fb5551bbc1cee71b187d672bb0e6549bbdc14248 block=48 gas=144303
+issue burbo_ext day=20250315 tx=0xddf1067426982cd2854463df9aa68d3e38ec411f9e358d630292e2ffa21d16ec block=49 gas=144303
+issue burbo_ext day=20250316 tx=0xb50012add4e1cb1872fc6e79d8deb6c9232a55523f3e826fbc2a17857ae26df1 block=50 gas=144315
+issue burbo_ext day=20250317 tx=0xd89cf15e5039ed6f09cf9589b4b7d0c5e8d89ae35ff45e62a0d55b4403dcbd72 block=51 gas=144315
+issue burbo_ext day=20250318 tx=0xdecf7c7eea3dc80c0eee7ec70b79f424d4e0b352df43d8f82763198c96456285 block=52 gas=144315
+issue burbo_ext day=20250319 tx=0x07271bb200811b0366d814ae25986a8e3a08278cda9369cd4442229b3edda7b8 block=53 gas=144315
+issue burbo_ext day=20250320 tx=0x54a63758a6c555e8967b2b9f1beead2947db5abc68e13bed43bf373299f39e7a block=54 gas=144315
+issue burbo_ext day=20250321 tx=0xb4095221fbafdf9377b33d955069ec44904d0a97a6668d311248281d51d212fa block=55 gas=144315
+issue burbo_ext day=20250322 tx=0x5fb96fc14330ef9098ea0f795d569dbdac97424868bf761e1b7286e4f87d585a block=56 gas=144315
+issue burbo_ext day=20250323 tx=0xe20be92438f7596307ca86e2535472cbb307404f9c8aa87fb28bbfdc20683346 block=57 gas=144315
+issue burbo_ext day=20250324 tx=0xdcb9192489a20a2523f9a117d9e58645c40c0ad7b257730aa8be02201018f631 block=58 gas=144303
+issue burbo_ext day=20250325 tx=0x1c41c3cafd48f6a72add7127530bacbef8537727ab88fc6c41bb373fd2924df1 block=59 gas=144291
+issue burbo_ext day=20250326 tx=0xa8283d0a5e78a4a30098424cd8acdf504bd1b6512c2ab8e53a10e50ef29d1aa1 block=60 gas=144315
+issue burbo_ext day=20250327 tx=0xca238b2ce76483d54046c9b76f5e8678c2efee61b25b2286a13fcd0930da4839 block=61 gas=144315
+issue burbo_ext day=20250328 tx=0x012609e5658869fd51561ba651ac67ba36aafae2c987305216ba4055d1194343 block=62 gas=144315
+issue burbo_ext day=20250329 tx=0x3e2e44ebee78b6250b7dcd970c7585a4368b54f5bb48bf76fea1f6bc9bdcc4f0 block=63 gas=144315
+issue burbo_ext day=20250330 tx=0xd324bf5362604f0ef2594a5006aed28777443b50727e7dd49503bd144d724df1 block=64 gas=144315
+issue burbo_ext day=20250331 tx=0x2f7d8ebcd032cf2e9951bfd0e4b05aebc9bccee9d569ceef17363899defe4014 block=65 gas=144315
+register race_bank_1 day=0 tx=0x3836850373ad23ce1248b7668136de36297bcc6ded03b0d9054ecdaceba39908 block=66 gas=49918
+issue race_bank_1 day=20250301 tx=0xac1165c2aded90b838ec1bbbfaf328c02d9523d9fc0356af28e92dbe92727f9b block=67 gas=144303
+issue race_bank_1 day=20250302 tx=0xef40d150e15dfa5570bcdcd840cf8aa906231038465c57a764e02e981dfe7186 block=68 gas=144303
+issue race_bank_1 day=20250303 tx=0xbf085e18bb8111b0a4b72b3ee03177431d8066da9152b312a12979e6fc4c297e block=69 gas=144303
+issue race_bank_1 day=20250304 tx=0xca227afe9ba09e1e4e8ca10af57b1cc4afd6ec7a91571faddd9100e2c674b879 block=70 gas=144315
+issue race_bank_1 day=20250305 tx=0x033914b5626232829e13ada6706d94b4cea1810d097ded971db6ecb2fb1803ef block=71 gas=144315
+issue race_bank_1 day=20250306 tx=0xf00899ab1eb957e32f84d2ed0dc93669b90ece98a62e6ad6ecdac3d2d58861f0 block=72 gas=144315
+issue race_bank_1 day=20250307 tx=0x96455e1ea3fdc7adc4e435d1ac9262cffbfdac0a1aede5168dac594c049e4dd1 block=73 gas=144315
+issue race_bank_1 day=20250308 tx=0xeecc1f76272505be970874876cca339e7d8e1f313cc7852b5e9232ee846cd9c8 block=74 gas=144303
+issue race_bank_1 day=20250309 tx=0x855e58739ddd649b71ba332493d6b7d6f1cfe2199c7719948fa9c61e47827c8a block=75 gas=144303
+issue race_bank_1 day=20250310 tx=0x6cd7388be08e312783e77c352f81c35d4e6d25dd53faa725e9c65532b249ecce block=76 gas=144315
+issue race_bank_1 day=20250311 tx=0xa9f91cdc622c081541de34d9581c383c4c596585e32aefcde348d0063e474ce6 block=77 gas=144315
+issue race_bank_1 day=20250312 tx=0x2443b609d26d01ca3757806d4bf7b7c85308e41171b0751c946a03ec289e740c block=78 gas=144303
+issue race_bank_1 day=20250313 tx=0xa669e6e5d6620b0362962196b6d1894f9b005ef998301400674b8f2b2c7f976d block=79 gas=144291
+issue race_bank_1 day=20250314 tx=0x7cc83758257f77c613121aede5f8468c384bcae9ee16edab87c6e6f43b2cac91 block=80 gas=144315
+issue race_bank_1 day=20250315 tx=0x11d70700f89ba110cb4b9f759ed25f0d55691ea3e42d28357b457cb343ad0a9d block=81 gas=144315
+issue race_bank_1 day=20250316 tx=0x28040379fc553493c7b6f779e5273e1e02d11f433085489776fe3fa456b487b9 block=82 gas=144303
+issue race_bank_1 day=20250317 tx=0xaff3336aade27f1dcc00c00c0479b32b8e65d73ddcf77b9100939eacd25be048 block=83 gas=144315
+issue race_bank_1 day=20250318 tx=0x440addfa0239730b09803341125b3f892847d73139fd95ea3233e6cc9d5b3c2b block=84 gas=144315
+issue race_bank_1 day=20250319 tx=0xb2f19c22d2afc791f94cbe1965488deabf5803b70b25a5902e55f100c5b2478f block=85 gas=144315
+issue race_bank_1 day=20250320 tx=0x51f71b80eedac7950d63e9f9f27059d4e36bb776208c76dc5dbf28b7ec8ea07c block=86 gas=144315
+issue race_bank_1 day=20250321 tx=0xdef63533c715ce047f4722bca249e82f31625f0470955b2053e67f4e07f9dc2b block=87 gas=144303
+issue race_bank_1 day=20250322 tx=0x6d7a27f23fc0e869546e22a7137e5602bba63635226c20cf6857cae08b8d98f1 block=88 gas=144315
+issue race_bank_1 day=20250323 tx=0xdf2070409d3133117bf0769fea365d8ca5b70ec491311a1214e6ad96d313cd79 block=89 gas=144303
+issue race_bank_1 day=20250324 tx=0xf1c8c2b487d5ce0e40c27a0742ebdf5e0ce345226c0dbffb48e742d7117f7c53 block=90 gas=144303
+issue race_bank_1 day=20250325 tx=0x093623ab6b5e3a1b35d4783ae8ab12b2e889b2df0121a69591f1a20525e706ef block=91 gas=144315
+issue race_bank_1 day=20250326 tx=0x2a9bd90c28c2e1cbfd9c660eec80d84817dbec81f35399ae3819d9350f59cef0 block=92 gas=144315
+issue race_bank_1 day=20250327 tx=0x6451c79cc4924a96ed148a010b92f87ce666b04766a1df05b39a216d9dc99937 block=93 gas=144315
+issue race_bank_1 day=20250328 tx=0x70d2d24a6c11ac2af9db2ff621e147caf89e70fe48c3aeaf1ca0c594ef316109 block=94 gas=144315
+issue race_bank_1 day=20250329 tx=0xcd56cc1fda8177f20000601f6ca5587518945a22c5a8cd596cb51e36bbacae9e block=95 gas=144315
+issue race_bank_1 day=20250330 tx=0x99d91a2125e00e5090d733d81917a9e79b29fbebf8d73fbd6ce8d125deea73f7 block=96 gas=144303
+issue race_bank_1 day=20250331 tx=0xc28ce685bd7bbe2da963e6e60c3fbc3764e529c5c98adc9252d7e20ce84a65cf block=97 gas=144303
+issued/registered 96 new transactions (already-issued days were skipped)
+== verify roots (snapshot mode): .venv/bin/python -m gridproof.cli verify --mode snapshot
+PASS verify[snapshot] asset=dudgeon_1 day=20250301 intervals=14/14 root_chain=0xecee20292b... root_local=0xecee20292b... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250302 intervals=48/48 root_chain=0xb66eef0d24... root_local=0xb66eef0d24... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250303 intervals=48/48 root_chain=0x12fb17f838... root_local=0x12fb17f838... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250304 intervals=48/48 root_chain=0xfe78f82b18... root_local=0xfe78f82b18... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250305 intervals=48/48 root_chain=0xaec6b84c75... root_local=0xaec6b84c75... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250306 intervals=48/48 root_chain=0x5164a8f5d0... root_local=0x5164a8f5d0... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250307 intervals=48/48 root_chain=0x715fd68fa5... root_local=0x715fd68fa5... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250308 intervals=48/48 root_chain=0xeb56c239a6... root_local=0xeb56c239a6... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250309 intervals=48/48 root_chain=0x7a47167b99... root_local=0x7a47167b99... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250310 intervals=48/48 root_chain=0x0551976a02... root_local=0x0551976a02... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250311 intervals=48/48 root_chain=0x28437e1318... root_local=0x28437e1318... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250312 intervals=48/48 root_chain=0xb184f25769... root_local=0xb184f25769... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250313 intervals=47/47 root_chain=0xeb92e7ac26... root_local=0xeb92e7ac26... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250314 intervals=39/39 root_chain=0x5a05831beb... root_local=0x5a05831beb... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250315 intervals=48/48 root_chain=0x816c946f3d... root_local=0x816c946f3d... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250316 intervals=48/48 root_chain=0x5a0dfedcba... root_local=0x5a0dfedcba... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250317 intervals=48/48 root_chain=0x9f87669796... root_local=0x9f87669796... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250318 intervals=48/48 root_chain=0xdab3969049... root_local=0xdab3969049... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250319 intervals=48/48 root_chain=0xc6ab9bdbd1... root_local=0xc6ab9bdbd1... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250320 intervals=25/25 root_chain=0xa05313c2f4... root_local=0xa05313c2f4... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250321 intervals=48/48 root_chain=0xfd01b3e541... root_local=0xfd01b3e541... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250322 intervals=47/47 root_chain=0xe4ee0beccd... root_local=0xe4ee0beccd... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250323 intervals=39/39 root_chain=0x78b1b9826f... root_local=0x78b1b9826f... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250324 intervals=44/44 root_chain=0x821674a442... root_local=0x821674a442... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250325 intervals=42/42 root_chain=0xb445c92c10... root_local=0xb445c92c10... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250326 intervals=40/40 root_chain=0x696a6436da... root_local=0x696a6436da... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250327 intervals=48/48 root_chain=0x4470672513... root_local=0x4470672513... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250328 intervals=48/48 root_chain=0xdf4c2e4814... root_local=0xdf4c2e4814... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250329 intervals=48/48 root_chain=0x941e399201... root_local=0x941e399201... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250330 intervals=46/46 root_chain=0x954d83df9f... root_local=0x954d83df9f... model_hash_ok=True
+PASS verify[snapshot] asset=dudgeon_1 day=20250331 intervals=30/30 root_chain=0x047cc04c44... root_local=0x047cc04c44... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250301 intervals=24/24 root_chain=0x40ae4ea316... root_local=0x40ae4ea316... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250302 intervals=45/45 root_chain=0xc7ad762388... root_local=0xc7ad762388... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250303 intervals=48/48 root_chain=0x9a62ba43bf... root_local=0x9a62ba43bf... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250304 intervals=47/47 root_chain=0xe514e626a7... root_local=0xe514e626a7... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250305 intervals=48/48 root_chain=0x5cbca62dc7... root_local=0x5cbca62dc7... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250306 intervals=48/48 root_chain=0x07469cfc08... root_local=0x07469cfc08... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250307 intervals=48/48 root_chain=0x4b9dddcb97... root_local=0x4b9dddcb97... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250308 intervals=48/48 root_chain=0x363f215fa9... root_local=0x363f215fa9... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250309 intervals=47/47 root_chain=0xb0c73280a9... root_local=0xb0c73280a9... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250310 intervals=37/37 root_chain=0x8e46a0e08e... root_local=0x8e46a0e08e... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250311 intervals=48/48 root_chain=0xaeb21f0488... root_local=0xaeb21f0488... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250312 intervals=48/48 root_chain=0xff729c4396... root_local=0xff729c4396... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250313 intervals=44/44 root_chain=0xefc10d9fff... root_local=0xefc10d9fff... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250314 intervals=28/28 root_chain=0x487c46f46b... root_local=0x487c46f46b... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250315 intervals=39/39 root_chain=0x20a734f797... root_local=0x20a734f797... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250316 intervals=36/36 root_chain=0x43f62eb7c4... root_local=0x43f62eb7c4... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250317 intervals=48/48 root_chain=0x38f0bf6e59... root_local=0x38f0bf6e59... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250318 intervals=48/48 root_chain=0x11988df4b7... root_local=0x11988df4b7... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250319 intervals=29/29 root_chain=0xd5edb1171f... root_local=0xd5edb1171f... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250320 intervals=41/41 root_chain=0xc7571f5eb0... root_local=0xc7571f5eb0... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250321 intervals=48/48 root_chain=0x29b2f49bde... root_local=0x29b2f49bde... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250322 intervals=42/42 root_chain=0x205a4403f6... root_local=0x205a4403f6... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250323 intervals=42/42 root_chain=0x27e37d9b8c... root_local=0x27e37d9b8c... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250324 intervals=19/19 root_chain=0xe4af1e0ecb... root_local=0xe4af1e0ecb... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250325 intervals=48/48 root_chain=0x5de9c54cfc... root_local=0x5de9c54cfc... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250326 intervals=22/22 root_chain=0x6924f93c2e... root_local=0x6924f93c2e... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250327 intervals=48/48 root_chain=0x14ab0c6bf5... root_local=0x14ab0c6bf5... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250328 intervals=48/48 root_chain=0x1419882f03... root_local=0x1419882f03... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250329 intervals=48/48 root_chain=0x78ebae42fc... root_local=0x78ebae42fc... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250330 intervals=46/46 root_chain=0x9b56d3dbc9... root_local=0x9b56d3dbc9... model_hash_ok=True
+PASS verify[snapshot] asset=burbo_ext day=20250331 intervals=29/29 root_chain=0xf01cea4763... root_local=0xf01cea4763... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250301 intervals=24/24 root_chain=0x2a6c94ec34... root_local=0x2a6c94ec34... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250302 intervals=48/48 root_chain=0xb29a21ebb7... root_local=0xb29a21ebb7... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250303 intervals=48/48 root_chain=0x50d346a8d9... root_local=0x50d346a8d9... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250304 intervals=48/48 root_chain=0xd21681408f... root_local=0xd21681408f... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250305 intervals=48/48 root_chain=0x4532c02d9f... root_local=0x4532c02d9f... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250306 intervals=48/48 root_chain=0x43c3c661f9... root_local=0x43c3c661f9... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250307 intervals=48/48 root_chain=0x11986ba913... root_local=0x11986ba913... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250308 intervals=48/48 root_chain=0x2272d00c43... root_local=0x2272d00c43... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250309 intervals=48/48 root_chain=0xcdbfe2a442... root_local=0xcdbfe2a442... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250310 intervals=47/47 root_chain=0x24fbd49d8d... root_local=0x24fbd49d8d... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250311 intervals=48/48 root_chain=0x8ea4dc2e93... root_local=0x8ea4dc2e93... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250312 intervals=48/48 root_chain=0x039aeff7a9... root_local=0x039aeff7a9... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250313 intervals=45/45 root_chain=0xd2072c4ced... root_local=0xd2072c4ced... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250314 intervals=48/48 root_chain=0x6d44f1a079... root_local=0x6d44f1a079... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250315 intervals=44/44 root_chain=0x1a88037a2d... root_local=0x1a88037a2d... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250316 intervals=48/48 root_chain=0x4262009b95... root_local=0x4262009b95... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250317 intervals=48/48 root_chain=0x50638a46a6... root_local=0x50638a46a6... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250318 intervals=48/48 root_chain=0x41f765c565... root_local=0x41f765c565... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250319 intervals=23/23 root_chain=0x97029b6639... root_local=0x97029b6639... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250320 intervals=24/24 root_chain=0x20dd226493... root_local=0x20dd226493... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250321 intervals=48/48 root_chain=0x8860914e07... root_local=0x8860914e07... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250322 intervals=44/44 root_chain=0x99c4c0819c... root_local=0x99c4c0819c... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250323 intervals=41/41 root_chain=0xb94e566604... root_local=0xb94e566604... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250324 intervals=41/41 root_chain=0xfa7e4ef15a... root_local=0xfa7e4ef15a... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250325 intervals=38/38 root_chain=0x19e36ab852... root_local=0x19e36ab852... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250326 intervals=38/38 root_chain=0x23879a10f0... root_local=0x23879a10f0... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250327 intervals=48/48 root_chain=0xe0e5f255a0... root_local=0xe0e5f255a0... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250328 intervals=48/48 root_chain=0xa039f640cc... root_local=0xa039f640cc... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250329 intervals=48/48 root_chain=0xd8bfe55499... root_local=0xd8bfe55499... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250330 intervals=46/46 root_chain=0x7b63f1eb7a... root_local=0x7b63f1eb7a... model_hash_ok=True
+PASS verify[snapshot] asset=race_bank_1 day=20250331 intervals=30/30 root_chain=0xf13751a946... root_local=0xf13751a946... model_hash_ok=True
+93/93 asset-days verified in snapshot mode; 0 drift notes (informational)
+== evaluate: .venv/bin/python -m gridproof.cli evaluate
+evaluation written to results/
+== build report and web/data: .venv/bin/python -m gridproof.cli report
+results/report.html

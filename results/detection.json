@@ -1,0 +1,79 @@
+{
+  "factors": [
+    1.1,
+    1.25,
+    1.5,
+    2.0
+  ],
+  "kind": "sensitivity_test_perturbation_of_real_data",
+  "max_samples": 2000,
+  "per_asset": {
+    "burbo_ext": {
+      "1.1": {
+        "detected": 92,
+        "n": 1289,
+        "recall": 0.071373
+      },
+      "1.25": {
+        "detected": 159,
+        "n": 1289,
+        "recall": 0.123351
+      },
+      "1.5": {
+        "detected": 247,
+        "n": 1289,
+        "recall": 0.191621
+      },
+      "2.0": {
+        "detected": 392,
+        "n": 1289,
+        "recall": 0.304112
+      }
+    },
+    "dudgeon_1": {
+      "1.1": {
+        "detected": 203,
+        "n": 1373,
+        "recall": 0.147851
+      },
+      "1.25": {
+        "detected": 264,
+        "n": 1373,
+        "recall": 0.19228
+      },
+      "1.5": {
+        "detected": 366,
+        "n": 1373,
+        "recall": 0.26657
+      },
+      "2.0": {
+        "detected": 494,
+        "n": 1373,
+        "recall": 0.359796
+      }
+    },
+    "race_bank_1": {
+      "1.1": {
+        "detected": 143,
+        "n": 1349,
+        "recall": 0.106004
+      },
+      "1.25": {
+        "detected": 205,
+        "n": 1349,
+        "recall": 0.151964
+      },
+      "1.5": {
+        "detected": 310,
+        "n": 1349,
+        "recall": 0.2298
+      },
+      "2.0": {
+        "detected": 465,
+        "n": 1349,
+        "recall": 0.3447
+      }
+    }
+  },
+  "seed": 7
+}

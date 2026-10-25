@@ -1,0 +1,100 @@
+[
+  {
+    "claim": "Every certified half-hour comes from public data (B1610, ERA5, NESO); nothing is synthetic",
+    "detail": "burbo_ext 20250301: 48 live periods equal the snapshot kWh and g; 3 source URLs recorded",
+    "id": "C01",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Every settlement period is accounted for, including the 46-period DST day (30 Mar 2025)",
+    "detail": "93 asset-days: accepted 4011 + rejected 447 + missing 0 == expected periods; DST day race_bank_1: expected 46, accepted 46, rejected 0, missing 0",
+    "id": "C02",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Held-out March false-flag rate is at most 3% per asset",
+    "detail": "rates burbo_ext=0.0031, dudgeon_1=0.0000, race_bank_1=0.0000 (threshold 0.03); negative import readings excluded and reported separately: burbo_ext=193 (min -1015 kWh), dudgeon_1=113 (min -711 kWh), race_bank_1=137 (min -1304 kWh)",
+    "id": "C03",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Detection vs inflation is a labelled sensitivity test on real data; blind regions are published",
+    "detail": "kind label ok, recall non-decreasing, blind regions for 3 assets; recall at max factor {'burbo_ext': 0.304112, 'dudgeon_1': 0.359796, 'race_bank_1': 0.3447}",
+    "id": "C04",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Python, Solidity and browser JS compute identical leaves and roots",
+    "detail": "20 leaves match python, Solidity and JS; 17 roots match incl. odd tree of 45 leaves",
+    "id": "C05",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Re-issuing an asset-day is impossible",
+    "detail": "re-issue of burbo_ext 20250301 reverted with BATCH_EXISTS",
+    "id": "C06",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "An interval retires exactly once; forged kWh or proof fails",
+    "detail": "second retire: ALREADY_RETIRED; forged g: BAD_PROOF; forged kWh: BAD_PROOF; non-holder: NOT_HOLDER",
+    "id": "C07",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "On-chain physical capacity caps hold",
+    "detail": "daily cap 6442501 kWh: EXCEEDS_DAILY_CAPACITY; interval 131428 kWh: EXCEEDS_INTERVAL_CAPACITY",
+    "id": "C08",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "On-chain retired grams equal the independent Python sum",
+    "detail": "5 real leaves: on-chain delta 561633 g, python sum 561633 g, receipts 561633 g; retire gas mean 157332.0",
+    "id": "C09",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "All on-chain roots are reproduced from snapshots; live re-fetch reproduces kWh and g",
+    "detail": "snapshot 93/93 and live 93/93 ok; envelope drift flips listed separately: 0",
+    "id": "C10",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "A one-digit tamper is detected and localised",
+    "detail": "tampered burbo_ext day 20250301 sp=5 kWh 574->575: verify exit 2, mismatch localised to sp=[0, 0, 5] fields=['root', 'snapshot_hash', 'kwh']",
+    "id": "C11",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "The on-chain model hash equals the sha256 of the model file",
+    "detail": "93 batches: batch file and on-chain model hash equal sha256 of data/models/{key}.json",
+    "id": "C12",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Gas per certified half-hour is measured (issue gas below 1M)",
+    "detail": "gas per certified half-hour 3346.0, mean issue gas 144311.0 (limit 1000000), mean retire gas 157332.0",
+    "id": "C13",
+    "ok": true,
+    "skipped": false
+  },
+  {
+    "claim": "Half-hourly vs flat-average tCO2e is measured and kWh matches the chain",
+    "detail": "half-hourly 19054.293708 t, flat 23371.058886 t, overstatement 22.655%; kWh emissions 159661425 chain 159661425 files 159661425",
+    "id": "C14",
+    "ok": true,
+    "skipped": false
+  }
+]

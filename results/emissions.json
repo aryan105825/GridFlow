@@ -1,0 +1,33 @@
+{
+  "by_asset": {
+    "burbo_ext": {
+      "days": 31,
+      "flat_mean_g_per_kwh": 146.379,
+      "kwh_certified": 56524574,
+      "overstatement_pct": 24.719,
+      "tco2e_flat_mean": 8274.003238,
+      "tco2e_halfhourly": 6634.104136
+    },
+    "dudgeon_1": {
+      "days": 31,
+      "flat_mean_g_per_kwh": 146.379,
+      "kwh_certified": 30159354,
+      "overstatement_pct": 21.394,
+      "tco2e_flat_mean": 4414.692142,
+      "tco2e_halfhourly": 3636.678454
+    },
+    "race_bank_1": {
+      "days": 31,
+      "flat_mean_g_per_kwh": 146.379,
+      "kwh_certified": 72977497,
+      "overstatement_pct": 21.618,
+      "tco2e_flat_mean": 10682.363506,
+      "tco2e_halfhourly": 8783.511118
+    }
+  },
+  "flat_basis": "unweighted mean of NESO actual gCO2/kWh over every issue-window half-hour of the asset, applied to certified kWh",
+  "kwh_certified": 159661425,
+  "overstatement_pct": 22.655,
+  "tco2e_flat_mean": 23371.058886,
+  "tco2e_halfhourly": 19054.293708
+}

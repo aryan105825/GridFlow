@@ -1,0 +1,908 @@
+{
+  "burbo_ext": [
+    {
+      "headroom_kwh_per_period": 40993.481,
+      "headroom_pct_capacity": 31.815,
+      "n": 17,
+      "ws_bin": "0.0-0.5"
+    },
+    {
+      "headroom_kwh_per_period": 40938.981,
+      "headroom_pct_capacity": 31.773,
+      "n": 158,
+      "ws_bin": "0.5-1.0"
+    },
+    {
+      "headroom_kwh_per_period": 40950.481,
+      "headroom_pct_capacity": 31.782,
+      "n": 209,
+      "ws_bin": "1.0-1.5"
+    },
+    {
+      "headroom_kwh_per_period": 40937.981,
+      "headroom_pct_capacity": 31.772,
+      "n": 388,
+      "ws_bin": "1.5-2.0"
+    },
+    {
+      "headroom_kwh_per_period": 64392.543,
+      "headroom_pct_capacity": 49.975,
+      "n": 419,
+      "ws_bin": "2.0-2.5"
+    },
+    {
+      "headroom_kwh_per_period": 64322.543,
+      "headroom_pct_capacity": 49.92,
+      "n": 446,
+      "ws_bin": "2.5-3.0"
+    },
+    {
+      "headroom_kwh_per_period": 65215.896,
+      "headroom_pct_capacity": 50.614,
+      "n": 504,
+      "ws_bin": "3.0-3.5"
+    },
+    {
+      "headroom_kwh_per_period": 63688.896,
+      "headroom_pct_capacity": 49.429,
+      "n": 582,
+      "ws_bin": "3.5-4.0"
+    },
+    {
+      "headroom_kwh_per_period": 61986.396,
+      "headroom_pct_capacity": 48.107,
+      "n": 639,
+      "ws_bin": "4.0-4.5"
+    },
+    {
+      "headroom_kwh_per_period": 59288.396,
+      "headroom_pct_capacity": 46.014,
+      "n": 757,
+      "ws_bin": "4.5-5.0"
+    },
+    {
+      "headroom_kwh_per_period": 54598.396,
+      "headroom_pct_capacity": 42.374,
+      "n": 791,
+      "ws_bin": "5.0-5.5"
+    },
+    {
+      "headroom_kwh_per_period": 58988.063,
+      "headroom_pct_capacity": 45.78,
+      "n": 887,
+      "ws_bin": "5.5-6.0"
+    },
+    {
+      "headroom_kwh_per_period": 70875.209,
+      "headroom_pct_capacity": 55.006,
+      "n": 852,
+      "ws_bin": "6.0-6.5"
+    },
+    {
+      "headroom_kwh_per_period": 64970.709,
+      "headroom_pct_capacity": 50.424,
+      "n": 864,
+      "ws_bin": "6.5-7.0"
+    },
+    {
+      "headroom_kwh_per_period": 69898.376,
+      "headroom_pct_capacity": 54.248,
+      "n": 834,
+      "ws_bin": "7.0-7.5"
+    },
+    {
+      "headroom_kwh_per_period": 76297.059,
+      "headroom_pct_capacity": 59.214,
+      "n": 758,
+      "ws_bin": "7.5-8.0"
+    },
+    {
+      "headroom_kwh_per_period": 75404.695,
+      "headroom_pct_capacity": 58.521,
+      "n": 776,
+      "ws_bin": "8.0-8.5"
+    },
+    {
+      "headroom_kwh_per_period": 64584.0,
+      "headroom_pct_capacity": 50.123,
+      "n": 779,
+      "ws_bin": "8.5-9.0"
+    },
+    {
+      "headroom_kwh_per_period": 55754.0,
+      "headroom_pct_capacity": 43.27,
+      "n": 647,
+      "ws_bin": "9.0-9.5"
+    },
+    {
+      "headroom_kwh_per_period": 43925.0,
+      "headroom_pct_capacity": 34.09,
+      "n": 575,
+      "ws_bin": "9.5-10.0"
+    },
+    {
+      "headroom_kwh_per_period": 34185.0,
+      "headroom_pct_capacity": 26.531,
+      "n": 575,
+      "ws_bin": "10.0-10.5"
+    },
+    {
+      "headroom_kwh_per_period": 24695.5,
+      "headroom_pct_capacity": 19.166,
+      "n": 520,
+      "ws_bin": "10.5-11.0"
+    },
+    {
+      "headroom_kwh_per_period": 17115.0,
+      "headroom_pct_capacity": 13.283,
+      "n": 393,
+      "ws_bin": "11.0-11.5"
+    },
+    {
+      "headroom_kwh_per_period": 10539.5,
+      "headroom_pct_capacity": 8.18,
+      "n": 442,
+      "ws_bin": "11.5-12.0"
+    },
+    {
+      "headroom_kwh_per_period": 9104.0,
+      "headroom_pct_capacity": 7.066,
+      "n": 349,
+      "ws_bin": "12.0-12.5"
+    },
+    {
+      "headroom_kwh_per_period": 8814.0,
+      "headroom_pct_capacity": 6.841,
+      "n": 341,
+      "ws_bin": "12.5-13.0"
+    },
+    {
+      "headroom_kwh_per_period": 7777.0,
+      "headroom_pct_capacity": 6.036,
+      "n": 242,
+      "ws_bin": "13.0-13.5"
+    },
+    {
+      "headroom_kwh_per_period": 7155.0,
+      "headroom_pct_capacity": 5.553,
+      "n": 267,
+      "ws_bin": "13.5-14.0"
+    },
+    {
+      "headroom_kwh_per_period": 7004.0,
+      "headroom_pct_capacity": 5.436,
+      "n": 215,
+      "ws_bin": "14.0-14.5"
+    },
+    {
+      "headroom_kwh_per_period": 7945.0,
+      "headroom_pct_capacity": 6.166,
+      "n": 141,
+      "ws_bin": "14.5-15.0"
+    },
+    {
+      "headroom_kwh_per_period": 7915.0,
+      "headroom_pct_capacity": 6.143,
+      "n": 127,
+      "ws_bin": "15.0-15.5"
+    },
+    {
+      "headroom_kwh_per_period": 5920.0,
+      "headroom_pct_capacity": 4.594,
+      "n": 80,
+      "ws_bin": "15.5-16.0"
+    },
+    {
+      "headroom_kwh_per_period": 5260.5,
+      "headroom_pct_capacity": 4.083,
+      "n": 76,
+      "ws_bin": "16.0-16.5"
+    },
+    {
+      "headroom_kwh_per_period": 5916.0,
+      "headroom_pct_capacity": 4.591,
+      "n": 57,
+      "ws_bin": "16.5-17.0"
+    },
+    {
+      "headroom_kwh_per_period": 7251.0,
+      "headroom_pct_capacity": 5.627,
+      "n": 66,
+      "ws_bin": "17.0-17.5"
+    },
+    {
+      "headroom_kwh_per_period": 6490.0,
+      "headroom_pct_capacity": 5.037,
+      "n": 42,
+      "ws_bin": "17.5-18.0"
+    },
+    {
+      "headroom_kwh_per_period": 8604.5,
+      "headroom_pct_capacity": 6.678,
+      "n": 30,
+      "ws_bin": "18.0-18.5"
+    },
+    {
+      "headroom_kwh_per_period": 8589.5,
+      "headroom_pct_capacity": 6.666,
+      "n": 32,
+      "ws_bin": "18.5-19.0"
+    },
+    {
+      "headroom_kwh_per_period": 8704.0,
+      "headroom_pct_capacity": 6.755,
+      "n": 31,
+      "ws_bin": "19.0-19.5"
+    },
+    {
+      "headroom_kwh_per_period": 10544.5,
+      "headroom_pct_capacity": 8.184,
+      "n": 40,
+      "ws_bin": "19.5-20.0"
+    },
+    {
+      "headroom_kwh_per_period": 9295.5,
+      "headroom_pct_capacity": 7.214,
+      "n": 12,
+      "ws_bin": "20.0-20.5"
+    },
+    {
+      "headroom_kwh_per_period": 13615.0,
+      "headroom_pct_capacity": 10.567,
+      "n": 9,
+      "ws_bin": "20.5-21.0"
+    },
+    {
+      "headroom_kwh_per_period": 17144.0,
+      "headroom_pct_capacity": 13.305,
+      "n": 7,
+      "ws_bin": "21.0-21.5"
+    },
+    {
+      "headroom_kwh_per_period": 10275.0,
+      "headroom_pct_capacity": 7.974,
+      "n": 11,
+      "ws_bin": "21.5-22.0"
+    },
+    {
+      "headroom_kwh_per_period": 17934.0,
+      "headroom_pct_capacity": 13.919,
+      "n": 12,
+      "ws_bin": "22.0-22.5"
+    },
+    {
+      "headroom_kwh_per_period": 40356.0,
+      "headroom_pct_capacity": 31.32,
+      "n": 5,
+      "ws_bin": "22.5-23.0"
+    },
+    {
+      "headroom_kwh_per_period": 43974.0,
+      "headroom_pct_capacity": 34.128,
+      "n": 3,
+      "ws_bin": "23.0-23.5"
+    },
+    {
+      "headroom_kwh_per_period": 33434.5,
+      "headroom_pct_capacity": 25.948,
+      "n": 6,
+      "ws_bin": "23.5-24.0"
+    },
+    {
+      "headroom_kwh_per_period": 34210.0,
+      "headroom_pct_capacity": 26.55,
+      "n": 6,
+      "ws_bin": "24.0-24.5"
+    },
+    {
+      "headroom_kwh_per_period": 30385.0,
+      "headroom_pct_capacity": 23.582,
+      "n": 8,
+      "ws_bin": "24.5-25.0"
+    },
+    {
+      "headroom_kwh_per_period": 26953.5,
+      "headroom_pct_capacity": 20.919,
+      "n": 4,
+      "ws_bin": "25.0-25.5"
+    },
+    {
+      "headroom_kwh_per_period": 35447.0,
+      "headroom_pct_capacity": 27.51,
+      "n": 1,
+      "ws_bin": "25.5-26.0"
+    },
+    {
+      "headroom_kwh_per_period": 37326.0,
+      "headroom_pct_capacity": 28.969,
+      "n": 1,
+      "ws_bin": "26.0-26.5"
+    },
+    {
+      "headroom_kwh_per_period": 36157.0,
+      "headroom_pct_capacity": 28.061,
+      "n": 1,
+      "ws_bin": "26.5+"
+    }
+  ],
+  "dudgeon_1": [
+    {
+      "headroom_kwh_per_period": 29541.224,
+      "headroom_pct_capacity": 54.706,
+      "n": 7,
+      "ws_bin": "0.0-0.5"
+    },
+    {
+      "headroom_kwh_per_period": 29560.724,
+      "headroom_pct_capacity": 54.742,
+      "n": 52,
+      "ws_bin": "0.5-1.0"
+    },
+    {
+      "headroom_kwh_per_period": 29564.224,
+      "headroom_pct_capacity": 54.749,
+      "n": 144,
+      "ws_bin": "1.0-1.5"
+    },
+    {
+      "headroom_kwh_per_period": 29507.224,
+      "headroom_pct_capacity": 54.643,
+      "n": 151,
+      "ws_bin": "1.5-2.0"
+    },
+    {
+      "headroom_kwh_per_period": 29426.224,
+      "headroom_pct_capacity": 54.493,
+      "n": 197,
+      "ws_bin": "2.0-2.5"
+    },
+    {
+      "headroom_kwh_per_period": 29142.224,
+      "headroom_pct_capacity": 53.967,
+      "n": 266,
+      "ws_bin": "2.5-3.0"
+    },
+    {
+      "headroom_kwh_per_period": 28709.724,
+      "headroom_pct_capacity": 53.166,
+      "n": 320,
+      "ws_bin": "3.0-3.5"
+    },
+    {
+      "headroom_kwh_per_period": 28033.724,
+      "headroom_pct_capacity": 51.914,
+      "n": 378,
+      "ws_bin": "3.5-4.0"
+    },
+    {
+      "headroom_kwh_per_period": 38923.736,
+      "headroom_pct_capacity": 72.081,
+      "n": 400,
+      "ws_bin": "4.0-4.5"
+    },
+    {
+      "headroom_kwh_per_period": 38162.736,
+      "headroom_pct_capacity": 70.672,
+      "n": 494,
+      "ws_bin": "4.5-5.0"
+    },
+    {
+      "headroom_kwh_per_period": 47881.118,
+      "headroom_pct_capacity": 88.669,
+      "n": 649,
+      "ws_bin": "5.0-5.5"
+    },
+    {
+      "headroom_kwh_per_period": 46036.618,
+      "headroom_pct_capacity": 85.253,
+      "n": 690,
+      "ws_bin": "5.5-6.0"
+    },
+    {
+      "headroom_kwh_per_period": 44922.118,
+      "headroom_pct_capacity": 83.189,
+      "n": 711,
+      "ws_bin": "6.0-6.5"
+    },
+    {
+      "headroom_kwh_per_period": 42781.118,
+      "headroom_pct_capacity": 79.224,
+      "n": 678,
+      "ws_bin": "6.5-7.0"
+    },
+    {
+      "headroom_kwh_per_period": 40545.118,
+      "headroom_pct_capacity": 75.084,
+      "n": 723,
+      "ws_bin": "7.0-7.5"
+    },
+    {
+      "headroom_kwh_per_period": 38105.118,
+      "headroom_pct_capacity": 70.565,
+      "n": 840,
+      "ws_bin": "7.5-8.0"
+    },
+    {
+      "headroom_kwh_per_period": 35364.118,
+      "headroom_pct_capacity": 65.489,
+      "n": 931,
+      "ws_bin": "8.0-8.5"
+    },
+    {
+      "headroom_kwh_per_period": 31991.118,
+      "headroom_pct_capacity": 59.243,
+      "n": 834,
+      "ws_bin": "8.5-9.0"
+    },
+    {
+      "headroom_kwh_per_period": 27382.118,
+      "headroom_pct_capacity": 50.708,
+      "n": 824,
+      "ws_bin": "9.0-9.5"
+    },
+    {
+      "headroom_kwh_per_period": 24239.026,
+      "headroom_pct_capacity": 44.887,
+      "n": 691,
+      "ws_bin": "9.5-10.0"
+    },
+    {
+      "headroom_kwh_per_period": 18684.254,
+      "headroom_pct_capacity": 34.6,
+      "n": 641,
+      "ws_bin": "10.0-10.5"
+    },
+    {
+      "headroom_kwh_per_period": 16366.0,
+      "headroom_pct_capacity": 30.307,
+      "n": 625,
+      "ws_bin": "10.5-11.0"
+    },
+    {
+      "headroom_kwh_per_period": 12281.5,
+      "headroom_pct_capacity": 22.744,
+      "n": 554,
+      "ws_bin": "11.0-11.5"
+    },
+    {
+      "headroom_kwh_per_period": 9302.0,
+      "headroom_pct_capacity": 17.226,
+      "n": 447,
+      "ws_bin": "11.5-12.0"
+    },
+    {
+      "headroom_kwh_per_period": 4795.5,
+      "headroom_pct_capacity": 8.881,
+      "n": 474,
+      "ws_bin": "12.0-12.5"
+    },
+    {
+      "headroom_kwh_per_period": 3901.5,
+      "headroom_pct_capacity": 7.225,
+      "n": 450,
+      "ws_bin": "12.5-13.0"
+    },
+    {
+      "headroom_kwh_per_period": 3258.0,
+      "headroom_pct_capacity": 6.033,
+      "n": 437,
+      "ws_bin": "13.0-13.5"
+    },
+    {
+      "headroom_kwh_per_period": 3164.0,
+      "headroom_pct_capacity": 5.859,
+      "n": 352,
+      "ws_bin": "13.5-14.0"
+    },
+    {
+      "headroom_kwh_per_period": 1673.5,
+      "headroom_pct_capacity": 3.099,
+      "n": 312,
+      "ws_bin": "14.0-14.5"
+    },
+    {
+      "headroom_kwh_per_period": 1185.0,
+      "headroom_pct_capacity": 2.194,
+      "n": 302,
+      "ws_bin": "14.5-15.0"
+    },
+    {
+      "headroom_kwh_per_period": 1220.5,
+      "headroom_pct_capacity": 2.26,
+      "n": 254,
+      "ws_bin": "15.0-15.5"
+    },
+    {
+      "headroom_kwh_per_period": 1173.0,
+      "headroom_pct_capacity": 2.172,
+      "n": 215,
+      "ws_bin": "15.5-16.0"
+    },
+    {
+      "headroom_kwh_per_period": 1045.0,
+      "headroom_pct_capacity": 1.935,
+      "n": 177,
+      "ws_bin": "16.0-16.5"
+    },
+    {
+      "headroom_kwh_per_period": 1026.0,
+      "headroom_pct_capacity": 1.9,
+      "n": 132,
+      "ws_bin": "16.5-17.0"
+    },
+    {
+      "headroom_kwh_per_period": 1003.0,
+      "headroom_pct_capacity": 1.857,
+      "n": 108,
+      "ws_bin": "17.0-17.5"
+    },
+    {
+      "headroom_kwh_per_period": 997.0,
+      "headroom_pct_capacity": 1.846,
+      "n": 86,
+      "ws_bin": "17.5-18.0"
+    },
+    {
+      "headroom_kwh_per_period": 998.0,
+      "headroom_pct_capacity": 1.848,
+      "n": 81,
+      "ws_bin": "18.0-18.5"
+    },
+    {
+      "headroom_kwh_per_period": 1002.0,
+      "headroom_pct_capacity": 1.856,
+      "n": 67,
+      "ws_bin": "18.5-19.0"
+    },
+    {
+      "headroom_kwh_per_period": 997.0,
+      "headroom_pct_capacity": 1.846,
+      "n": 70,
+      "ws_bin": "19.0-19.5"
+    },
+    {
+      "headroom_kwh_per_period": 991.0,
+      "headroom_pct_capacity": 1.835,
+      "n": 58,
+      "ws_bin": "19.5-20.0"
+    },
+    {
+      "headroom_kwh_per_period": 993.0,
+      "headroom_pct_capacity": 1.839,
+      "n": 53,
+      "ws_bin": "20.0-20.5"
+    },
+    {
+      "headroom_kwh_per_period": 1050.0,
+      "headroom_pct_capacity": 1.944,
+      "n": 42,
+      "ws_bin": "20.5-21.0"
+    },
+    {
+      "headroom_kwh_per_period": 997.0,
+      "headroom_pct_capacity": 1.846,
+      "n": 32,
+      "ws_bin": "21.0-21.5"
+    },
+    {
+      "headroom_kwh_per_period": 1003.5,
+      "headroom_pct_capacity": 1.858,
+      "n": 42,
+      "ws_bin": "21.5-22.0"
+    },
+    {
+      "headroom_kwh_per_period": 1047.5,
+      "headroom_pct_capacity": 1.94,
+      "n": 22,
+      "ws_bin": "22.0-22.5"
+    },
+    {
+      "headroom_kwh_per_period": 1124.0,
+      "headroom_pct_capacity": 2.081,
+      "n": 15,
+      "ws_bin": "22.5-23.0"
+    },
+    {
+      "headroom_kwh_per_period": 1025.0,
+      "headroom_pct_capacity": 1.898,
+      "n": 3,
+      "ws_bin": "23.0-23.5"
+    },
+    {
+      "headroom_kwh_per_period": 4845.0,
+      "headroom_pct_capacity": 8.972,
+      "n": 3,
+      "ws_bin": "23.5+"
+    }
+  ],
+  "race_bank_1": [
+    {
+      "headroom_kwh_per_period": 129556.936,
+      "headroom_pct_capacity": 91.237,
+      "n": 7,
+      "ws_bin": "0.0-0.5"
+    },
+    {
+      "headroom_kwh_per_period": 129553.436,
+      "headroom_pct_capacity": 91.235,
+      "n": 70,
+      "ws_bin": "0.5-1.0"
+    },
+    {
+      "headroom_kwh_per_period": 129488.436,
+      "headroom_pct_capacity": 91.189,
+      "n": 106,
+      "ws_bin": "1.0-1.5"
+    },
+    {
+      "headroom_kwh_per_period": 129531.936,
+      "headroom_pct_capacity": 91.22,
+      "n": 129,
+      "ws_bin": "1.5-2.0"
+    },
+    {
+      "headroom_kwh_per_period": 129526.936,
+      "headroom_pct_capacity": 91.216,
+      "n": 185,
+      "ws_bin": "2.0-2.5"
+    },
+    {
+      "headroom_kwh_per_period": 129464.936,
+      "headroom_pct_capacity": 91.172,
+      "n": 305,
+      "ws_bin": "2.5-3.0"
+    },
+    {
+      "headroom_kwh_per_period": 128546.936,
+      "headroom_pct_capacity": 90.526,
+      "n": 333,
+      "ws_bin": "3.0-3.5"
+    },
+    {
+      "headroom_kwh_per_period": 126475.936,
+      "headroom_pct_capacity": 89.068,
+      "n": 446,
+      "ws_bin": "3.5-4.0"
+    },
+    {
+      "headroom_kwh_per_period": 124583.936,
+      "headroom_pct_capacity": 87.735,
+      "n": 478,
+      "ws_bin": "4.0-4.5"
+    },
+    {
+      "headroom_kwh_per_period": 121645.936,
+      "headroom_pct_capacity": 85.666,
+      "n": 522,
+      "ws_bin": "4.5-5.0"
+    },
+    {
+      "headroom_kwh_per_period": 118555.936,
+      "headroom_pct_capacity": 83.49,
+      "n": 610,
+      "ws_bin": "5.0-5.5"
+    },
+    {
+      "headroom_kwh_per_period": 115145.936,
+      "headroom_pct_capacity": 81.089,
+      "n": 699,
+      "ws_bin": "5.5-6.0"
+    },
+    {
+      "headroom_kwh_per_period": 110390.936,
+      "headroom_pct_capacity": 77.74,
+      "n": 680,
+      "ws_bin": "6.0-6.5"
+    },
+    {
+      "headroom_kwh_per_period": 107735.936,
+      "headroom_pct_capacity": 75.87,
+      "n": 729,
+      "ws_bin": "6.5-7.0"
+    },
+    {
+      "headroom_kwh_per_period": 101095.936,
+      "headroom_pct_capacity": 71.194,
+      "n": 777,
+      "ws_bin": "7.0-7.5"
+    },
+    {
+      "headroom_kwh_per_period": 92135.936,
+      "headroom_pct_capacity": 64.884,
+      "n": 885,
+      "ws_bin": "7.5-8.0"
+    },
+    {
+      "headroom_kwh_per_period": 86105.936,
+      "headroom_pct_capacity": 60.638,
+      "n": 895,
+      "ws_bin": "8.0-8.5"
+    },
+    {
+      "headroom_kwh_per_period": 78115.936,
+      "headroom_pct_capacity": 55.011,
+      "n": 891,
+      "ws_bin": "8.5-9.0"
+    },
+    {
+      "headroom_kwh_per_period": 66860.936,
+      "headroom_pct_capacity": 47.085,
+      "n": 800,
+      "ws_bin": "9.0-9.5"
+    },
+    {
+      "headroom_kwh_per_period": 63142.242,
+      "headroom_pct_capacity": 44.466,
+      "n": 769,
+      "ws_bin": "9.5-10.0"
+    },
+    {
+      "headroom_kwh_per_period": 50562.242,
+      "headroom_pct_capacity": 35.607,
+      "n": 685,
+      "ws_bin": "10.0-10.5"
+    },
+    {
+      "headroom_kwh_per_period": 42776.202,
+      "headroom_pct_capacity": 30.124,
+      "n": 580,
+      "ws_bin": "10.5-11.0"
+    },
+    {
+      "headroom_kwh_per_period": 33896.0,
+      "headroom_pct_capacity": 23.87,
+      "n": 536,
+      "ws_bin": "11.0-11.5"
+    },
+    {
+      "headroom_kwh_per_period": 25211.0,
+      "headroom_pct_capacity": 17.754,
+      "n": 535,
+      "ws_bin": "11.5-12.0"
+    },
+    {
+      "headroom_kwh_per_period": 19776.0,
+      "headroom_pct_capacity": 13.927,
+      "n": 454,
+      "ws_bin": "12.0-12.5"
+    },
+    {
+      "headroom_kwh_per_period": 14291.0,
+      "headroom_pct_capacity": 10.064,
+      "n": 374,
+      "ws_bin": "12.5-13.0"
+    },
+    {
+      "headroom_kwh_per_period": 11211.0,
+      "headroom_pct_capacity": 7.895,
+      "n": 346,
+      "ws_bin": "13.0-13.5"
+    },
+    {
+      "headroom_kwh_per_period": 9131.0,
+      "headroom_pct_capacity": 6.43,
+      "n": 381,
+      "ws_bin": "13.5-14.0"
+    },
+    {
+      "headroom_kwh_per_period": 9321.0,
+      "headroom_pct_capacity": 6.564,
+      "n": 302,
+      "ws_bin": "14.0-14.5"
+    },
+    {
+      "headroom_kwh_per_period": 7651.0,
+      "headroom_pct_capacity": 5.388,
+      "n": 247,
+      "ws_bin": "14.5-15.0"
+    },
+    {
+      "headroom_kwh_per_period": 7121.0,
+      "headroom_pct_capacity": 5.015,
+      "n": 201,
+      "ws_bin": "15.0-15.5"
+    },
+    {
+      "headroom_kwh_per_period": 6691.0,
+      "headroom_pct_capacity": 4.712,
+      "n": 178,
+      "ws_bin": "15.5-16.0"
+    },
+    {
+      "headroom_kwh_per_period": 6371.0,
+      "headroom_pct_capacity": 4.487,
+      "n": 166,
+      "ws_bin": "16.0-16.5"
+    },
+    {
+      "headroom_kwh_per_period": 5751.0,
+      "headroom_pct_capacity": 4.05,
+      "n": 101,
+      "ws_bin": "16.5-17.0"
+    },
+    {
+      "headroom_kwh_per_period": 8571.0,
+      "headroom_pct_capacity": 6.036,
+      "n": 103,
+      "ws_bin": "17.0-17.5"
+    },
+    {
+      "headroom_kwh_per_period": 6291.0,
+      "headroom_pct_capacity": 4.43,
+      "n": 108,
+      "ws_bin": "17.5-18.0"
+    },
+    {
+      "headroom_kwh_per_period": 4511.0,
+      "headroom_pct_capacity": 3.177,
+      "n": 85,
+      "ws_bin": "18.0-18.5"
+    },
+    {
+      "headroom_kwh_per_period": 6951.0,
+      "headroom_pct_capacity": 4.895,
+      "n": 70,
+      "ws_bin": "18.5-19.0"
+    },
+    {
+      "headroom_kwh_per_period": 5666.0,
+      "headroom_pct_capacity": 3.99,
+      "n": 50,
+      "ws_bin": "19.0-19.5"
+    },
+    {
+      "headroom_kwh_per_period": 4976.0,
+      "headroom_pct_capacity": 3.504,
+      "n": 58,
+      "ws_bin": "19.5-20.0"
+    },
+    {
+      "headroom_kwh_per_period": 3441.0,
+      "headroom_pct_capacity": 2.423,
+      "n": 33,
+      "ws_bin": "20.0-20.5"
+    },
+    {
+      "headroom_kwh_per_period": 7681.0,
+      "headroom_pct_capacity": 5.409,
+      "n": 35,
+      "ws_bin": "20.5-21.0"
+    },
+    {
+      "headroom_kwh_per_period": 8416.0,
+      "headroom_pct_capacity": 5.927,
+      "n": 28,
+      "ws_bin": "21.0-21.5"
+    },
+    {
+      "headroom_kwh_per_period": 12491.0,
+      "headroom_pct_capacity": 8.796,
+      "n": 13,
+      "ws_bin": "21.5-22.0"
+    },
+    {
+      "headroom_kwh_per_period": 11491.0,
+      "headroom_pct_capacity": 8.092,
+      "n": 22,
+      "ws_bin": "22.0-22.5"
+    },
+    {
+      "headroom_kwh_per_period": 10161.0,
+      "headroom_pct_capacity": 7.156,
+      "n": 12,
+      "ws_bin": "22.5-23.0"
+    },
+    {
+      "headroom_kwh_per_period": 15921.0,
+      "headroom_pct_capacity": 11.212,
+      "n": 13,
+      "ws_bin": "23.0-23.5"
+    },
+    {
+      "headroom_kwh_per_period": 17611.0,
+      "headroom_pct_capacity": 12.402,
+      "n": 2,
+      "ws_bin": "23.5+"
+    }
+  ]
+}

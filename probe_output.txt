@@ -1,0 +1,15 @@
+
+===== B1610 parameter variants =====
+OK   variant=A: from/to ISO datetime + bmUnit http=200 bytes=11356
+OK   variant=B: from/to date only + bmUnit http=200 bytes=11356
+FAIL variant=C: settlementDateFrom/To + bmUnit http=400 bytes=347
+OK   variant=D: from/to ISO + settlementPeriodFrom/To + bmUnit http=200 bytes=21766
+winner: A: from/to ISO datetime + bmUnit
+
+===== B1610 head =====
+[{"dataset":"B1610","psrType":"Generation","bmUnit":"T_DDGNO-1","nationalGridBmUnitId":"DDGNO-1","settlementDate":"2025-03-30","settlementPeriod":1,"halfHourEndTime":"2025-03-30T00:30:00","settlementRunType":"RF","quantity":53.012},{"dataset":"B1610","psrType":"Generation","bmUnit":"T_DDGNO-1","nationalGridBmUnitId":"DDGNO-1","settlementDate":"2025-03-30","settlementPeriod":2,"halfHourEndTime":"2025-03-30T01:00:00","settlementRunType":"RF","quantity":53.033},{"dataset":"B1610","psrType":"Generation","bmUnit":"T_DDGNO-1","nationalGridBmUnitId":"DDGNO-1","settlementDate":"2025-03-30","settlementPeriod":3,"halfHourEndTime":"2025-03-30T01:30:00","settlementRunType":"RF","quantity":53.026},{"dataset":"B1610","psrType":"Generation","bmUnit":"T_DDGNO-1","nationalGridBmUnitId":"DDGNO-1","settlemen
+
+===== BMU reference: records for assets.yaml units =====
+--- T_DDGNO-1
+ortCapability":"8.000","creditQualifyingStatus":true,"demandInProductionFlag":false,"gspGroupId":"_H","gspGroupName":"Southern","interconnectorId":null},{"nationalGridBmUnit":"DDGNO-1","elexonBmUnit":"T_DDGNO-1","eic":"48W00000DDGNO-1E","fuelType":"WIND","leadPartyName":"Dudgeon Offshore Wind Ltd","bmUnitType":"T","fpnFlag":true,"bmUnitName":"Dudgeon Generator BMU 1","leadPartyId":"DUDGEON","demandCapacity":"-1.818","generationCapacity":"108.000","productionOrConsumptionFlag":"P","transmissionLossFactor":"0.0083094","workingDayCreditAssessmentImportCapability":"-0.727","nonWorkingDayCreditAssessmentImpor
+--- T_BRBEO-1

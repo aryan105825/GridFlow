@@ -1,0 +1,8 @@
+{
+  "batches": 93,
+  "chain_id": 31337,
+  "contract": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "gas_issue_mean": 144311.0,
+  "gas_per_interval": 3346.0,
+  "gas_retire_mean": 157332.0
+}
